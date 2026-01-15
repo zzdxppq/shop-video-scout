@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拍后合成 - 交互式Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .logo svg {
+            width: 50px;
+            height: 50px;
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            margin-bottom: 48px;
+        }
+
+        .version-cards {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .version-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 32px;
+            width: 300px;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .version-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+        }
+
+        .card-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .card-icon.web {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+
+        .card-icon.ios {
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+        }
+
+        .card-icon svg {
+            width: 36px;
+            height: 36px;
+            color: white;
+        }
+
+        .version-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: #1f2937;
+        }
+
+        .version-card .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .badge.h5 {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .badge.native {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .version-card p {
+            color: #6b7280;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .features {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .features li {
+            color: #4b5563;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .features li::before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 60px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.875rem;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+        }
+
+        @media (max-width: 680px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .version-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .version-card {
+                width: 100%;
+                max-width: 340px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#764ba2" stroke-width="2">
+                <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+            </svg>
+        </div>
+
+        <h1>拍后合成</h1>
+        <p class="subtitle">AI驱动的店铺短视频自动生成工具</p>
+
+        <div class="version-cards">
+            <a href="./web/index.html" class="version-card">
+                <div class="card-icon web">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                        <line x1="8" y1="21" x2="16" y2="21"/>
+                        <line x1="12" y1="17" x2="12" y2="21"/>
+                    </svg>
+                </div>
+                <h2>Web 版本</h2>
+                <span class="badge h5">兼容H5移动端</span>
+                <p>适用于桌面浏览器和移动端浏览器，响应式设计自适应各种屏幕尺寸。</p>
+                <ul class="features">
+                    <li>完整6步操作流程</li>
+                    <li>响应式布局设计</li>
+                    <li>模拟AI处理动画</li>
+                    <li>可交互的原型演示</li>
+                </ul>
+            </a>
+
+            <a href="./ios/index.html" class="version-card">
+                <div class="card-icon ios">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                        <line x1="12" y1="18" x2="12.01" y2="18"/>
+                    </svg>
+                </div>
+                <h2>iOS 版本</h2>
+                <span class="badge native">原生App风格</span>
+                <p>V2.0会员订阅App预览，模拟iOS原生界面风格和交互体验。</p>
+                <ul class="features">
+                    <li>iOS原生设计语言</li>
+                    <li>iPhone设备框架</li>
+                    <li>会员订阅界面</li>
+                    <li>流畅转场动画</li>
+                </ul>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>Shop Video Scout V1.0 交互式Demo</p>
+        </div>
+    </div>
+</body>
+</html>

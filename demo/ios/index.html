@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拍后合成 - iOS App Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="demo-container">
+        <!-- Back to home -->
+        <a href="../index.html" class="back-home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            返回首页
+        </a>
+
+        <!-- Device info -->
+        <div class="device-info">
+            <h2>iOS App 预览</h2>
+            <p>V2.0 会员订阅版本概念演示</p>
+            <div class="device-selector">
+                <button class="device-btn active" data-device="iphone14">iPhone 14 Pro</button>
+                <button class="device-btn" data-device="iphone-se">iPhone SE</button>
+            </div>
+        </div>
+
+        <!-- iPhone Frame -->
+        <div class="iphone-frame" id="iphoneFrame">
+            <div class="iphone-notch"></div>
+            <div class="iphone-screen">
+                <!-- iOS App Content -->
+                <div class="ios-app">
+                    <!-- Status Bar -->
+                    <div class="ios-status-bar">
+                        <span class="status-time">9:41</span>
+                        <div class="status-icons">
+                            <svg class="signal" viewBox="0 0 18 12"><path d="M0 8h2v4H0zm4-3h2v7H4zm4-3h2v10H8zm4-2h2v12h-2zm4 0h2v12h-2z" fill="currentColor"/></svg>
+                            <svg class="wifi" viewBox="0 0 16 12"><path d="M8 9.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm-3.54-2.04a5 5 0 017.08 0l-1.06 1.06a3.5 3.5 0 00-4.96 0l-1.06-1.06zm-2.12-2.12a8 8 0 0111.32 0l-1.06 1.06a6.5 6.5 0 00-9.2 0L2.34 5.34z" fill="currentColor"/></svg>
+                            <svg class="battery" viewBox="0 0 25 12"><rect x="0" y="0" width="22" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="1"/><rect x="2" y="2" width="17" height="8" rx="1" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor"/></svg>
+                        </div>
+                    </div>
+
+                    <!-- App Views Container -->
+                    <div class="ios-views-container">
+                        <!-- Home View -->
+                        <div class="ios-view active" id="homeView">
+                            <div class="ios-scroll-content">
+                                <!-- Hero Section -->
+                                <div class="hero-section">
+                                    <div class="app-logo">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                        </svg>
+                                    </div>
+                                    <h1>拍后合成</h1>
+                                    <p>AI驱动的店铺视频生成工具</p>
+                                </div>
+
+                                <!-- Quick Actions -->
+                                <div class="quick-actions">
+                                    <button class="action-card primary" onclick="showView('createView')">
+                                        <div class="action-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <line x1="12" y1="8" x2="12" y2="16"/>
+                                                <line x1="8" y1="12" x2="16" y2="12"/>
+                                            </svg>
+                                        </div>
+                                        <span>创建新视频</span>
+                                        <span class="action-desc">开始AI视频生成</span>
+                                    </button>
+                                    <button class="action-card" onclick="showView('historyView')">
+                                        <div class="action-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <polyline points="12,6 12,12 16,14"/>
+                                            </svg>
+                                        </div>
+                                        <span>历史作品</span>
+                                        <span class="action-desc">查看已生成视频</span>
+                                    </button>
+                                </div>
+
+                                <!-- Membership Card -->
+                                <div class="membership-card" onclick="showView('memberView')">
+                                    <div class="member-gradient"></div>
+                                    <div class="member-content">
+                                        <div class="member-info">
+                                            <span class="member-badge">PRO</span>
+                                            <h3>升级会员</h3>
+                                            <p>解锁无限创作 + 声音克隆</p>
+                                        </div>
+                                        <div class="member-price">
+                                            <span class="price">¥29</span>
+                                            <span class="period">/月</span>
+                                        </div>
+                                    </div>
+                                    <div class="member-features">
+                                        <span>无限生成</span>
+                                        <span>声音克隆</span>
+                                        <span>高清导出</span>
+                                        <span>无水印</span>
+                                    </div>
+                                </div>
+
+                                <!-- Recent Works -->
+                                <div class="section-header">
+                                    <h2>最近作品</h2>
+                                    <button class="see-all">查看全部</button>
+                                </div>
+                                <div class="recent-works">
+                                    <div class="work-card">
+                                        <div class="work-thumb">🍲</div>
+                                        <div class="work-info">
+                                            <span class="work-title">香满楼探店</span>
+                                            <span class="work-date">今天 14:30</span>
+                                        </div>
+                                    </div>
+                                    <div class="work-card">
+                                        <div class="work-thumb">☕</div>
+                                        <div class="work-info">
+                                            <span class="work-title">咖啡小馆</span>
+                                            <span class="work-date">昨天 10:15</span>
+                                        </div>
+                                    </div>
+                                    <div class="work-card">
+                                        <div class="work-thumb">💇</div>
+                                        <div class="work-info">
+                                            <span class="work-title">造型工作室</span>
+                                            <span class="work-date">3天前</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tips Section -->
+                                <div class="tips-section">
+                                    <h3>创作小贴士</h3>
+                                    <div class="tip-card">
+                                        <span class="tip-icon">💡</span>
+                                        <p>上传10-20个不同角度的视频，AI能生成更精彩的内容</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Create View -->
+                        <div class="ios-view" id="createView">
+                            <!-- Navigation Bar -->
+                            <div class="ios-nav-bar">
+                                <button class="nav-back" onclick="showView('homeView')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M15 18l-6-6 6-6"/>
+                                    </svg>
+                                </button>
+                                <span class="nav-title">创建视频</span>
+                                <div class="nav-spacer"></div>
+                            </div>
+
+                            <div class="ios-scroll-content with-nav">
+                                <!-- Step Indicator -->
+                                <div class="ios-steps">
+                                    <div class="ios-step active">
+                                        <div class="step-dot"></div>
+                                        <span>信息</span>
+                                    </div>
+                                    <div class="step-connector"></div>
+                                    <div class="ios-step">
+                                        <div class="step-dot"></div>
+                                        <span>上传</span>
+                                    </div>
+                                    <div class="step-connector"></div>
+                                    <div class="ios-step">
+                                        <div class="step-dot"></div>
+                                        <span>生成</span>
+                                    </div>
+                                </div>
+
+                                <!-- Form Section -->
+                                <div class="ios-form-section">
+                                    <div class="ios-form-group">
+                                        <label>店铺名称</label>
+                                        <input type="text" placeholder="输入店铺名称" value="香满楼火锅店">
+                                    </div>
+                                    <div class="ios-form-group">
+                                        <label>店铺类型</label>
+                                        <div class="ios-select">
+                                            <span>餐饮美食</span>
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M6 9l6 6 6-6"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="ios-form-group">
+                                        <label>优惠活动</label>
+                                        <textarea placeholder="描述当前优惠">新店开业，全场8折！</textarea>
+                                    </div>
+                                    <div class="ios-form-group">
+                                        <label>视频风格</label>
+                                        <div class="ios-segment">
+                                            <button class="segment-btn active">热情活力</button>
+                                            <button class="segment-btn">专业品质</button>
+                                            <button class="segment-btn">温馨治愈</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Upload Section -->
+                                <div class="ios-upload-section">
+                                    <div class="upload-header">
+                                        <h3>上传视频素材</h3>
+                                        <span class="upload-count">已选 6 个</span>
+                                    </div>
+                                    <div class="ios-upload-grid">
+                                        <div class="upload-item">🎬</div>
+                                        <div class="upload-item">🍲</div>
+                                        <div class="upload-item">🔥</div>
+                                        <div class="upload-item">🥩</div>
+                                        <div class="upload-item">🏠</div>
+                                        <div class="upload-item">👨‍🍳</div>
+                                        <div class="upload-item add">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Generate Button -->
+                                <button class="ios-btn-primary" onclick="showView('processingView')">
+                                    开始AI生成
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Processing View -->
+                        <div class="ios-view" id="processingView">
+                            <div class="ios-nav-bar">
+                                <button class="nav-back" onclick="showView('createView')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M15 18l-6-6 6-6"/>
+                                    </svg>
+                                </button>
+                                <span class="nav-title">AI处理中</span>
+                                <div class="nav-spacer"></div>
+                            </div>
+
+                            <div class="ios-processing-content">
+                                <div class="processing-animation">
+                                    <div class="processing-circle">
+                                        <svg viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="45" fill="none" stroke="#e5e7eb" stroke-width="6"/>
+                                            <circle cx="50" cy="50" r="45" fill="none" stroke="url(#gradient)" stroke-width="6" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="70" class="progress-ring"/>
+                                            <defs>
+                                                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                    <stop offset="0%" stop-color="#667eea"/>
+                                                    <stop offset="100%" stop-color="#764ba2"/>
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
+                                        <span class="progress-percent">75%</span>
+                                    </div>
+                                </div>
+
+                                <div class="processing-status">
+                                    <h2>正在生成您的视频</h2>
+                                    <p class="status-detail">AI配音合成中...</p>
+                                </div>
+
+                                <div class="processing-steps">
+                                    <div class="p-step completed">
+                                        <span class="p-step-icon">✓</span>
+                                        <span class="p-step-text">镜头分析完成</span>
+                                    </div>
+                                    <div class="p-step completed">
+                                        <span class="p-step-icon">✓</span>
+                                        <span class="p-step-text">脚本生成完成</span>
+                                    </div>
+                                    <div class="p-step active">
+                                        <span class="p-step-icon">
+                                            <div class="mini-spinner"></div>
+                                        </span>
+                                        <span class="p-step-text">AI配音合成</span>
+                                    </div>
+                                    <div class="p-step">
+                                        <span class="p-step-icon">4</span>
+                                        <span class="p-step-text">视频渲染</span>
+                                    </div>
+                                </div>
+
+                                <button class="ios-btn-secondary" onclick="showView('resultView')">
+                                    跳过演示，查看结果
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Result View -->
+                        <div class="ios-view" id="resultView">
+                            <div class="ios-nav-bar">
+                                <button class="nav-back" onclick="showView('homeView')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M15 18l-6-6 6-6"/>
+                                    </svg>
+                                </button>
+                                <span class="nav-title">生成完成</span>
+                                <button class="nav-action">分享</button>
+                            </div>
+
+                            <div class="ios-scroll-content with-nav">
+                                <!-- Video Preview -->
+                                <div class="ios-video-preview">
+                                    <div class="video-container">
+                                        <div class="video-placeholder-ios">
+                                            <div class="play-btn-ios">
+                                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                                    <polygon points="5,3 19,12 5,21"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="video-meta">
+                                        <span class="duration">00:45</span>
+                                        <span class="quality">1080p</span>
+                                    </div>
+                                </div>
+
+                                <!-- Video Info -->
+                                <div class="ios-info-card">
+                                    <h3>香满楼火锅店_探店视频</h3>
+                                    <div class="info-row">
+                                        <span class="info-label">格式</span>
+                                        <span class="info-value">MP4 (H.264)</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">大小</span>
+                                        <span class="info-value">28.5 MB</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">创建时间</span>
+                                        <span class="info-value">今天 14:30</span>
+                                    </div>
+                                </div>
+
+                                <!-- Publish Helper -->
+                                <div class="ios-publish-section">
+                                    <h3>发布辅助</h3>
+
+                                    <div class="ios-card">
+                                        <div class="card-header-ios">
+                                            <span class="card-icon-ios">🔥</span>
+                                            <span>推荐热门话题</span>
+                                        </div>
+                                        <div class="ios-tags">
+                                            <span class="ios-tag">#美食探店</span>
+                                            <span class="ios-tag">#火锅</span>
+                                            <span class="ios-tag">#吃货日常</span>
+                                            <span class="ios-tag">#本地美食</span>
+                                        </div>
+                                        <button class="ios-copy-btn">复制全部</button>
+                                    </div>
+
+                                    <div class="ios-card">
+                                        <div class="card-header-ios">
+                                            <span class="card-icon-ios">✨</span>
+                                            <span>标题建议</span>
+                                        </div>
+                                        <div class="ios-title-list">
+                                            <div class="title-item-ios">
+                                                <p>这家火锅店也太绝了！百年秘制锅底，8折优惠中！</p>
+                                                <button class="copy-single">复制</button>
+                                            </div>
+                                            <div class="title-item-ios">
+                                                <p>本地人私藏的宝藏火锅店！羊肉鲜嫩到犯规！</p>
+                                                <button class="copy-single">复制</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="ios-action-buttons">
+                                    <button class="ios-btn-primary">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                                            <polyline points="7,10 12,15 17,10"/>
+                                            <line x1="12" y1="15" x2="12" y2="3"/>
+                                        </svg>
+                                        保存到相册
+                                    </button>
+                                    <button class="ios-btn-secondary" onclick="showView('homeView')">
+                                        返回首页
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Membership View -->
+                        <div class="ios-view" id="memberView">
+                            <div class="ios-nav-bar transparent">
+                                <button class="nav-back light" onclick="showView('homeView')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M15 18l-6-6 6-6"/>
+                                    </svg>
+                                </button>
+                                <span class="nav-title light">会员订阅</span>
+                                <div class="nav-spacer"></div>
+                            </div>
+
+                            <div class="member-page">
+                                <div class="member-hero">
+                                    <div class="member-logo">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+                                        </svg>
+                                    </div>
+                                    <h1>解锁PRO会员</h1>
+                                    <p>无限创作，释放AI全部潜能</p>
+                                </div>
+
+                                <div class="member-plans">
+                                    <div class="plan-card">
+                                        <span class="plan-name">月度会员</span>
+                                        <div class="plan-price">
+                                            <span class="price-value">¥29</span>
+                                            <span class="price-unit">/月</span>
+                                        </div>
+                                    </div>
+                                    <div class="plan-card popular">
+                                        <span class="popular-badge">推荐</span>
+                                        <span class="plan-name">年度会员</span>
+                                        <div class="plan-price">
+                                            <span class="price-value">¥199</span>
+                                            <span class="price-unit">/年</span>
+                                        </div>
+                                        <span class="save-badge">省¥149</span>
+                                    </div>
+                                </div>
+
+                                <div class="member-benefits">
+                                    <h3>PRO会员权益</h3>
+                                    <div class="benefit-item">
+                                        <span class="benefit-icon">♾️</span>
+                                        <div class="benefit-text">
+                                            <span class="benefit-title">无限视频生成</span>
+                                            <span class="benefit-desc">每月不限次数创作</span>
+                                        </div>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <span class="benefit-icon">🎙️</span>
+                                        <div class="benefit-text">
+                                            <span class="benefit-title">声音克隆</span>
+                                            <span class="benefit-desc">使用自己的声音配音</span>
+                                        </div>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <span class="benefit-icon">📺</span>
+                                        <div class="benefit-text">
+                                            <span class="benefit-title">4K高清导出</span>
+                                            <span class="benefit-desc">最高画质无损导出</span>
+                                        </div>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <span class="benefit-icon">✨</span>
+                                        <div class="benefit-text">
+                                            <span class="benefit-title">去除水印</span>
+                                            <span class="benefit-desc">导出视频无品牌水印</span>
+                                        </div>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <span class="benefit-icon">🎨</span>
+                                        <div class="benefit-text">
+                                            <span class="benefit-title">高级模板</span>
+                                            <span class="benefit-desc">解锁全部视频风格模板</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button class="ios-btn-subscribe">
+                                    立即订阅
+                                </button>
+                                <p class="subscribe-note">订阅后可随时取消，按比例退款</p>
+                            </div>
+                        </div>
+
+                        <!-- History View -->
+                        <div class="ios-view" id="historyView">
+                            <div class="ios-nav-bar">
+                                <button class="nav-back" onclick="showView('homeView')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M15 18l-6-6 6-6"/>
+                                    </svg>
+                                </button>
+                                <span class="nav-title">历史作品</span>
+                                <button class="nav-action">编辑</button>
+                            </div>
+
+                            <div class="ios-scroll-content with-nav">
+                                <div class="history-list">
+                                    <div class="history-item" onclick="showView('resultView')">
+                                        <div class="history-thumb">🍲</div>
+                                        <div class="history-info">
+                                            <span class="history-title">香满楼火锅店_探店视频</span>
+                                            <span class="history-meta">45秒 · 28.5MB · 今天 14:30</span>
+                                        </div>
+                                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M9 18l6-6-6-6"/>
+                                        </svg>
+                                    </div>
+                                    <div class="history-item">
+                                        <div class="history-thumb">☕</div>
+                                        <div class="history-info">
+                                            <span class="history-title">咖啡小馆_新品推荐</span>
+                                            <span class="history-meta">38秒 · 22.1MB · 昨天 10:15</span>
+                                        </div>
+                                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M9 18l6-6-6-6"/>
+                                        </svg>
+                                    </div>
+                                    <div class="history-item">
+                                        <div class="history-thumb">💇</div>
+                                        <div class="history-info">
+                                            <span class="history-title">造型工作室_开业宣传</span>
+                                            <span class="history-meta">52秒 · 35.2MB · 3天前</span>
+                                        </div>
+                                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M9 18l6-6-6-6"/>
+                                        </svg>
+                                    </div>
+                                    <div class="history-item">
+                                        <div class="history-thumb">🎂</div>
+                                        <div class="history-info">
+                                            <span class="history-title">甜蜜蛋糕坊_生日蛋糕</span>
+                                            <span class="history-meta">30秒 · 18.8MB · 5天前</span>
+                                        </div>
+                                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M9 18l6-6-6-6"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Bar -->
+                    <div class="ios-tab-bar">
+                        <button class="tab-item active" onclick="showView('homeView')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                            </svg>
+                            <span>首页</span>
+                        </button>
+                        <button class="tab-item" onclick="showView('createView')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="16"/>
+                                <line x1="8" y1="12" x2="16" y2="12"/>
+                            </svg>
+                            <span>创建</span>
+                        </button>
+                        <button class="tab-item" onclick="showView('memberView')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+                            </svg>
+                            <span>会员</span>
+                        </button>
+                        <button class="tab-item" onclick="showView('historyView')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            <span>我的</span>
+                        </button>
+                    </div>
+
+                    <!-- Home Indicator -->
+                    <div class="ios-home-indicator"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
