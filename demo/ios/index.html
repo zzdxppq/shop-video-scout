@@ -20,10 +20,6 @@
         <div class="device-info">
             <h2>iOS App 预览</h2>
             <p>V2.0 会员订阅版本概念演示</p>
-            <div class="device-selector">
-                <button class="device-btn active" data-device="iphone14">iPhone 14 Pro</button>
-                <button class="device-btn" data-device="iphone-se">iPhone SE</button>
-            </div>
         </div>
 
         <!-- iPhone Frame -->
@@ -60,7 +56,7 @@
 
                                 <!-- Quick Actions -->
                                 <div class="quick-actions">
-                                    <button class="action-card primary" onclick="showView('createView')">
+                                    <button class="action-card primary" onclick="showView('createStep1')">
                                         <div class="action-icon">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <circle cx="12" cy="12" r="10"/>
@@ -78,8 +74,8 @@
                                                 <polyline points="12,6 12,12 16,14"/>
                                             </svg>
                                         </div>
-                                        <span>历史作品</span>
-                                        <span class="action-desc">查看已生成视频</span>
+                                        <span>我的作品</span>
+                                        <span class="action-desc">查看生成任务</span>
                                     </button>
                                 </div>
 
@@ -97,57 +93,45 @@
                                             <span class="period">/月</span>
                                         </div>
                                     </div>
-                                    <div class="member-features">
-                                        <span>无限生成</span>
-                                        <span>声音克隆</span>
-                                        <span>高清导出</span>
-                                        <span>无水印</span>
-                                    </div>
                                 </div>
 
-                                <!-- Recent Works -->
+                                <!-- Recent Tasks -->
                                 <div class="section-header">
-                                    <h2>最近作品</h2>
-                                    <button class="see-all">查看全部</button>
+                                    <h2>最近任务</h2>
+                                    <button class="see-all" onclick="showView('historyView')">查看全部</button>
                                 </div>
-                                <div class="recent-works">
-                                    <div class="work-card">
-                                        <div class="work-thumb">🍲</div>
-                                        <div class="work-info">
-                                            <span class="work-title">香满楼探店</span>
-                                            <span class="work-date">今天 14:30</span>
+                                <div class="recent-tasks">
+                                    <div class="task-card completed" onclick="showView('resultView')">
+                                        <div class="task-thumb">🍲</div>
+                                        <div class="task-info">
+                                            <span class="task-title">香满楼探店视频</span>
+                                            <span class="task-time">今天 14:30</span>
+                                        </div>
+                                        <div class="task-status done">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                                <polyline points="22,4 12,14.01 9,11.01"/>
+                                            </svg>
+                                            已完成
                                         </div>
                                     </div>
-                                    <div class="work-card">
-                                        <div class="work-thumb">☕</div>
-                                        <div class="work-info">
-                                            <span class="work-title">咖啡小馆</span>
-                                            <span class="work-date">昨天 10:15</span>
+                                    <div class="task-card processing">
+                                        <div class="task-thumb">☕</div>
+                                        <div class="task-info">
+                                            <span class="task-title">咖啡小馆宣传</span>
+                                            <span class="task-time">今天 15:20</span>
                                         </div>
-                                    </div>
-                                    <div class="work-card">
-                                        <div class="work-thumb">💇</div>
-                                        <div class="work-info">
-                                            <span class="work-title">造型工作室</span>
-                                            <span class="work-date">3天前</span>
+                                        <div class="task-status pending">
+                                            <div class="mini-spinner"></div>
+                                            合成中 75%
                                         </div>
-                                    </div>
-                                </div>
-
-                                <!-- Tips Section -->
-                                <div class="tips-section">
-                                    <h3>创作小贴士</h3>
-                                    <div class="tip-card">
-                                        <span class="tip-icon">💡</span>
-                                        <p>上传10-20个不同角度的视频，AI能生成更精彩的内容</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Create View -->
-                        <div class="ios-view" id="createView">
-                            <!-- Navigation Bar -->
+                        <!-- Create Step 1: 店铺信息 -->
+                        <div class="ios-view" id="createStep1">
                             <div class="ios-nav-bar">
                                 <button class="nav-back" onclick="showView('homeView')">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -160,31 +144,22 @@
 
                             <div class="ios-scroll-content with-nav">
                                 <!-- Step Indicator -->
-                                <div class="ios-steps">
-                                    <div class="ios-step active">
-                                        <div class="step-dot"></div>
-                                        <span>信息</span>
-                                    </div>
-                                    <div class="step-connector"></div>
-                                    <div class="ios-step">
-                                        <div class="step-dot"></div>
-                                        <span>上传</span>
-                                    </div>
-                                    <div class="step-connector"></div>
-                                    <div class="ios-step">
-                                        <div class="step-dot"></div>
-                                        <span>生成</span>
-                                    </div>
+                                <div class="ios-steps-bar">
+                                    <div class="step-item active"><span>1</span>信息</div>
+                                    <div class="step-item"><span>2</span>上传</div>
+                                    <div class="step-item"><span>3</span>分析</div>
+                                    <div class="step-item"><span>4</span>脚本</div>
+                                    <div class="step-item"><span>5</span>配音</div>
+                                    <div class="step-item"><span>6</span>导出</div>
                                 </div>
 
-                                <!-- Form Section -->
                                 <div class="ios-form-section">
                                     <div class="ios-form-group">
-                                        <label>店铺名称</label>
+                                        <label>店铺名称 *</label>
                                         <input type="text" placeholder="输入店铺名称" value="香满楼火锅店">
                                     </div>
                                     <div class="ios-form-group">
-                                        <label>店铺类型</label>
+                                        <label>店铺类型 *</label>
                                         <div class="ios-select">
                                             <span>餐饮美食</span>
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -194,7 +169,11 @@
                                     </div>
                                     <div class="ios-form-group">
                                         <label>优惠活动</label>
-                                        <textarea placeholder="描述当前优惠">新店开业，全场8折！</textarea>
+                                        <textarea placeholder="描述当前优惠活动">新店开业，全场8折！锅底免费升级~</textarea>
+                                    </div>
+                                    <div class="ios-form-group">
+                                        <label>店铺特色</label>
+                                        <textarea placeholder="描述店铺卖点">传承百年秘制锅底，草原直供羔羊肉</textarea>
                                     </div>
                                     <div class="ios-form-group">
                                         <label>视频风格</label>
@@ -206,12 +185,36 @@
                                     </div>
                                 </div>
 
-                                <!-- Upload Section -->
-                                <div class="ios-upload-section">
-                                    <div class="upload-header">
-                                        <h3>上传视频素材</h3>
-                                        <span class="upload-count">已选 6 个</span>
-                                    </div>
+                                <button class="ios-btn-primary" onclick="showView('createStep2')">
+                                    下一步
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Create Step 2: 上传视频 -->
+                        <div class="ios-view" id="createStep2">
+                            <div class="ios-nav-bar">
+                                <button class="nav-back" onclick="showView('createStep1')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M15 18l-6-6 6-6"/>
+                                    </svg>
+                                </button>
+                                <span class="nav-title">上传视频</span>
+                                <div class="nav-spacer"></div>
+                            </div>
+
+                            <div class="ios-scroll-content with-nav">
+                                <div class="ios-steps-bar">
+                                    <div class="step-item done"><span>✓</span>信息</div>
+                                    <div class="step-item active"><span>2</span>上传</div>
+                                    <div class="step-item"><span>3</span>分析</div>
+                                    <div class="step-item"><span>4</span>脚本</div>
+                                    <div class="step-item"><span>5</span>配音</div>
+                                    <div class="step-item"><span>6</span>导出</div>
+                                </div>
+
+                                <div class="upload-section">
+                                    <p class="upload-tip">上传10-20个店铺视频，AI将选出最佳镜头</p>
                                     <div class="ios-upload-grid">
                                         <div class="upload-item">🎬</div>
                                         <div class="upload-item">🍲</div>
@@ -226,33 +229,43 @@
                                             </svg>
                                         </div>
                                     </div>
+                                    <p class="upload-count">已选择 6 个视频 · 86.5MB</p>
                                 </div>
 
-                                <!-- Generate Button -->
-                                <button class="ios-btn-primary" onclick="showView('processingView')">
-                                    开始AI生成
+                                <button class="ios-btn-primary" onclick="startAnalysis()">
+                                    开始AI分析
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Processing View -->
-                        <div class="ios-view" id="processingView">
+                        <!-- Create Step 3: AI分析 -->
+                        <div class="ios-view" id="createStep3">
                             <div class="ios-nav-bar">
-                                <button class="nav-back" onclick="showView('createView')">
+                                <button class="nav-back" onclick="showView('createStep2')">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                                         <path d="M15 18l-6-6 6-6"/>
                                     </svg>
                                 </button>
-                                <span class="nav-title">AI处理中</span>
+                                <span class="nav-title">AI分析</span>
                                 <div class="nav-spacer"></div>
                             </div>
 
-                            <div class="ios-processing-content">
-                                <div class="processing-animation">
+                            <div class="ios-scroll-content with-nav">
+                                <div class="ios-steps-bar">
+                                    <div class="step-item done"><span>✓</span>信息</div>
+                                    <div class="step-item done"><span>✓</span>上传</div>
+                                    <div class="step-item active"><span>3</span>分析</div>
+                                    <div class="step-item"><span>4</span>脚本</div>
+                                    <div class="step-item"><span>5</span>配音</div>
+                                    <div class="step-item"><span>6</span>导出</div>
+                                </div>
+
+                                <!-- Processing Animation -->
+                                <div class="ios-processing" id="analysisProcessing">
                                     <div class="processing-circle">
                                         <svg viewBox="0 0 100 100">
                                             <circle cx="50" cy="50" r="45" fill="none" stroke="#e5e7eb" stroke-width="6"/>
-                                            <circle cx="50" cy="50" r="45" fill="none" stroke="url(#gradient)" stroke-width="6" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="70" class="progress-ring"/>
+                                            <circle cx="50" cy="50" r="45" fill="none" stroke="url(#gradient)" stroke-width="6" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="100" class="progress-ring"/>
                                             <defs>
                                                 <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                                                     <stop offset="0%" stop-color="#667eea"/>
@@ -260,39 +273,343 @@
                                                 </linearGradient>
                                             </defs>
                                         </svg>
-                                        <span class="progress-percent">75%</span>
+                                        <span class="progress-percent" id="analysisPercent">0%</span>
                                     </div>
+                                    <h3>AI正在分析视频</h3>
+                                    <p id="analysisStatus">识别镜头内容中...</p>
                                 </div>
 
-                                <div class="processing-status">
-                                    <h2>正在生成您的视频</h2>
-                                    <p class="status-detail">AI配音合成中...</p>
-                                </div>
+                                <!-- Analysis Results (hidden initially) -->
+                                <div class="analysis-result" id="analysisResult" style="display:none;">
+                                    <div class="result-summary">
+                                        <div class="summary-box">
+                                            <span class="num">6</span>
+                                            <span class="label">视频分析</span>
+                                        </div>
+                                        <div class="summary-box">
+                                            <span class="num">18</span>
+                                            <span class="label">识别镜头</span>
+                                        </div>
+                                        <div class="summary-box highlight">
+                                            <span class="num">8</span>
+                                            <span class="label">推荐使用</span>
+                                        </div>
+                                    </div>
 
-                                <div class="processing-steps">
-                                    <div class="p-step completed">
-                                        <span class="p-step-icon">✓</span>
-                                        <span class="p-step-text">镜头分析完成</span>
+                                    <h3 class="section-title">推荐镜头</h3>
+                                    <div class="shots-list">
+                                        <div class="shot-item">
+                                            <span class="shot-icon">🔥</span>
+                                            <div class="shot-detail">
+                                                <span class="shot-name">火锅沸腾</span>
+                                                <span class="shot-desc">美食特写 · 0:03-0:08</span>
+                                            </div>
+                                            <span class="shot-score">9.5</span>
+                                        </div>
+                                        <div class="shot-item">
+                                            <span class="shot-icon">🥩</span>
+                                            <div class="shot-detail">
+                                                <span class="shot-name">羊肉切片</span>
+                                                <span class="shot-desc">食材展示 · 0:00-0:05</span>
+                                            </div>
+                                            <span class="shot-score">9.2</span>
+                                        </div>
+                                        <div class="shot-item">
+                                            <span class="shot-icon">🍲</span>
+                                            <div class="shot-detail">
+                                                <span class="shot-name">锅底配料</span>
+                                                <span class="shot-desc">菜品特写 · 0:02-0:06</span>
+                                            </div>
+                                            <span class="shot-score">9.0</span>
+                                        </div>
+                                        <div class="shot-item">
+                                            <span class="shot-icon">🏠</span>
+                                            <div class="shot-detail">
+                                                <span class="shot-name">用餐环境</span>
+                                                <span class="shot-desc">环境展示 · 0:05-0:10</span>
+                                            </div>
+                                            <span class="shot-score">8.8</span>
+                                        </div>
                                     </div>
-                                    <div class="p-step completed">
-                                        <span class="p-step-icon">✓</span>
-                                        <span class="p-step-text">脚本生成完成</span>
-                                    </div>
-                                    <div class="p-step active">
-                                        <span class="p-step-icon">
-                                            <div class="mini-spinner"></div>
-                                        </span>
-                                        <span class="p-step-text">AI配音合成</span>
-                                    </div>
-                                    <div class="p-step">
-                                        <span class="p-step-icon">4</span>
-                                        <span class="p-step-text">视频渲染</span>
-                                    </div>
-                                </div>
 
-                                <button class="ios-btn-secondary" onclick="showView('resultView')">
-                                    跳过演示，查看结果
+                                    <button class="ios-btn-primary" onclick="showView('createStep4')">
+                                        下一步：生成脚本
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Create Step 4: 生成脚本 -->
+                        <div class="ios-view" id="createStep4">
+                            <div class="ios-nav-bar">
+                                <button class="nav-back" onclick="showView('createStep3')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M15 18l-6-6 6-6"/>
+                                    </svg>
                                 </button>
+                                <span class="nav-title">口播脚本</span>
+                                <button class="nav-action" id="editToggleBtn" onclick="toggleScriptEdit()">编辑</button>
+                            </div>
+
+                            <div class="ios-scroll-content with-nav">
+                                <div class="ios-steps-bar">
+                                    <div class="step-item done"><span>✓</span>信息</div>
+                                    <div class="step-item done"><span>✓</span>上传</div>
+                                    <div class="step-item done"><span>✓</span>分析</div>
+                                    <div class="step-item active"><span>4</span>脚本</div>
+                                    <div class="step-item"><span>5</span>配音</div>
+                                    <div class="step-item"><span>6</span>导出</div>
+                                </div>
+
+                                <!-- Script View Mode -->
+                                <div class="script-view" id="scriptViewMode">
+                                    <div class="script-segment">
+                                        <div class="seg-header">
+                                            <span class="seg-num">1</span>
+                                            <span class="seg-shot">🎬 门店展示</span>
+                                        </div>
+                                        <p class="seg-text">家人们！今天带你们探一家超火的火锅店——香满楼！</p>
+                                    </div>
+                                    <div class="script-segment">
+                                        <div class="seg-header">
+                                            <span class="seg-num">2</span>
+                                            <span class="seg-shot">🔥 火锅沸腾</span>
+                                        </div>
+                                        <p class="seg-text">看这锅底，红油翻滚，光是看着就让人口水直流！这可是传承百年的秘制配方！</p>
+                                    </div>
+                                    <div class="script-segment">
+                                        <div class="seg-header">
+                                            <span class="seg-num">3</span>
+                                            <span class="seg-shot">🥩 食材展示</span>
+                                        </div>
+                                        <p class="seg-text">他们家的羊肉必须吹爆！内蒙古草原直供，现切现涮！</p>
+                                    </div>
+                                    <div class="script-segment">
+                                        <div class="seg-header">
+                                            <span class="seg-num">4</span>
+                                            <span class="seg-shot">🍲 菜品特写</span>
+                                        </div>
+                                        <p class="seg-text">涮个8秒，蘸上秘制麻酱，入口即化，鲜嫩多汁！</p>
+                                    </div>
+                                    <div class="script-segment">
+                                        <div class="seg-header">
+                                            <span class="seg-num">5</span>
+                                            <span class="seg-shot">🏠 环境展示</span>
+                                        </div>
+                                        <p class="seg-text">环境也很nice，包间私密性超好！</p>
+                                    </div>
+                                    <div class="script-segment highlight">
+                                        <div class="seg-header">
+                                            <span class="seg-num">6</span>
+                                            <span class="seg-shot">📢 促销信息</span>
+                                        </div>
+                                        <p class="seg-text">新店开业全场8折！锅底免费升级！冲就完事了！</p>
+                                    </div>
+
+                                    <div class="script-meta">
+                                        <span>预计时长: 45秒</span>
+                                        <span>脚本字数: 156字</span>
+                                    </div>
+                                </div>
+
+                                <!-- Script Edit Mode -->
+                                <div class="script-edit" id="scriptEditMode" style="display:none;">
+                                    <p class="edit-tip">点击文本框可编辑脚本内容</p>
+                                    <div class="edit-segment">
+                                        <div class="seg-header">
+                                            <span class="seg-num">1</span>
+                                            <span class="seg-shot">🎬 门店展示</span>
+                                        </div>
+                                        <textarea>家人们！今天带你们探一家超火的火锅店——香满楼！</textarea>
+                                    </div>
+                                    <div class="edit-segment">
+                                        <div class="seg-header">
+                                            <span class="seg-num">2</span>
+                                            <span class="seg-shot">🔥 火锅沸腾</span>
+                                        </div>
+                                        <textarea>看这锅底，红油翻滚，光是看着就让人口水直流！这可是传承百年的秘制配方！</textarea>
+                                    </div>
+                                    <div class="edit-segment">
+                                        <div class="seg-header">
+                                            <span class="seg-num">3</span>
+                                            <span class="seg-shot">🥩 食材展示</span>
+                                        </div>
+                                        <textarea>他们家的羊肉必须吹爆！内蒙古草原直供，现切现涮！</textarea>
+                                    </div>
+                                    <div class="edit-segment">
+                                        <div class="seg-header">
+                                            <span class="seg-num">4</span>
+                                            <span class="seg-shot">🍲 菜品特写</span>
+                                        </div>
+                                        <textarea>涮个8秒，蘸上秘制麻酱，入口即化，鲜嫩多汁！</textarea>
+                                    </div>
+                                    <div class="edit-segment">
+                                        <div class="seg-header">
+                                            <span class="seg-num">5</span>
+                                            <span class="seg-shot">🏠 环境展示</span>
+                                        </div>
+                                        <textarea>环境也很nice，包间私密性超好！</textarea>
+                                    </div>
+                                    <div class="edit-segment">
+                                        <div class="seg-header">
+                                            <span class="seg-num">6</span>
+                                            <span class="seg-shot">📢 促销信息</span>
+                                        </div>
+                                        <textarea>新店开业全场8折！锅底免费升级！冲就完事了！</textarea>
+                                    </div>
+                                </div>
+
+                                <button class="ios-btn-primary" onclick="showView('createStep5')">
+                                    下一步：选择配音
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Create Step 5: 配音合成 -->
+                        <div class="ios-view" id="createStep5">
+                            <div class="ios-nav-bar">
+                                <button class="nav-back" onclick="showView('createStep4')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M15 18l-6-6 6-6"/>
+                                    </svg>
+                                </button>
+                                <span class="nav-title">配音合成</span>
+                                <div class="nav-spacer"></div>
+                            </div>
+
+                            <div class="ios-scroll-content with-nav">
+                                <div class="ios-steps-bar">
+                                    <div class="step-item done"><span>✓</span>信息</div>
+                                    <div class="step-item done"><span>✓</span>上传</div>
+                                    <div class="step-item done"><span>✓</span>分析</div>
+                                    <div class="step-item done"><span>✓</span>脚本</div>
+                                    <div class="step-item active"><span>5</span>配音</div>
+                                    <div class="step-item"><span>6</span>导出</div>
+                                </div>
+
+                                <h3 class="section-title">选择配音音色</h3>
+                                <div class="voice-list">
+                                    <div class="voice-item active" onclick="selectVoice(this)">
+                                        <span class="voice-avatar">👩</span>
+                                        <div class="voice-info">
+                                            <span class="voice-name">活力女声</span>
+                                            <span class="voice-desc">年轻活泼，适合美食探店</span>
+                                        </div>
+                                        <div class="voice-check">✓</div>
+                                    </div>
+                                    <div class="voice-item" onclick="selectVoice(this)">
+                                        <span class="voice-avatar">👨</span>
+                                        <div class="voice-info">
+                                            <span class="voice-name">温暖男声</span>
+                                            <span class="voice-desc">稳重亲切，适合品质推荐</span>
+                                        </div>
+                                        <div class="voice-check">✓</div>
+                                    </div>
+                                    <div class="voice-item" onclick="selectVoice(this)">
+                                        <span class="voice-avatar">👧</span>
+                                        <div class="voice-info">
+                                            <span class="voice-name">甜美女声</span>
+                                            <span class="voice-desc">可爱甜美，适合甜品饮品</span>
+                                        </div>
+                                        <div class="voice-check">✓</div>
+                                    </div>
+                                    <div class="voice-item clone">
+                                        <span class="voice-avatar">🎙️</span>
+                                        <div class="voice-info">
+                                            <span class="voice-name">我的声音</span>
+                                            <span class="voice-desc">使用克隆的个人音色</span>
+                                        </div>
+                                        <span class="clone-badge">PRO</span>
+                                    </div>
+                                </div>
+
+                                <h3 class="section-title">合成设置</h3>
+                                <div class="settings-list">
+                                    <div class="setting-item">
+                                        <span>语速</span>
+                                        <span class="setting-value">1.0x</span>
+                                    </div>
+                                    <div class="setting-item">
+                                        <span>背景音乐</span>
+                                        <span class="setting-value">轻快节奏</span>
+                                    </div>
+                                    <div class="setting-item">
+                                        <span>转场效果</span>
+                                        <span class="setting-value">淡入淡出</span>
+                                    </div>
+                                </div>
+
+                                <button class="ios-btn-primary" onclick="startSynthesis()">
+                                    开始合成视频
+                                </button>
+                                <p class="synthesis-note">合成任务将在后台执行，完成后会通知您</p>
+                            </div>
+                        </div>
+
+                        <!-- Create Step 6: 合成进度/结果 -->
+                        <div class="ios-view" id="createStep6">
+                            <div class="ios-nav-bar">
+                                <button class="nav-back" onclick="showView('homeView')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M15 18l-6-6 6-6"/>
+                                    </svg>
+                                </button>
+                                <span class="nav-title">合成中</span>
+                                <div class="nav-spacer"></div>
+                            </div>
+
+                            <div class="ios-scroll-content with-nav centered">
+                                <div class="synthesis-status">
+                                    <div class="processing-circle large">
+                                        <svg viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="45" fill="none" stroke="#e5e7eb" stroke-width="6"/>
+                                            <circle cx="50" cy="50" r="45" fill="none" stroke="url(#gradient2)" stroke-width="6" stroke-linecap="round" stroke-dasharray="283" class="progress-ring-animated"/>
+                                            <defs>
+                                                <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                    <stop offset="0%" stop-color="#667eea"/>
+                                                    <stop offset="100%" stop-color="#764ba2"/>
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
+                                        <div class="status-icon">
+                                            <div class="mini-spinner large"></div>
+                                        </div>
+                                    </div>
+                                    <h2>视频合成中</h2>
+                                    <p class="status-text">正在进行AI配音...</p>
+                                    <div class="progress-info">
+                                        <div class="progress-bar-ios">
+                                            <div class="progress-fill" id="synthesisFill" style="width: 35%"></div>
+                                        </div>
+                                        <span id="synthesisPercent">35%</span>
+                                    </div>
+
+                                    <div class="task-steps">
+                                        <div class="task-step done">
+                                            <span class="step-check">✓</span>
+                                            脚本配音
+                                        </div>
+                                        <div class="task-step active">
+                                            <div class="mini-spinner small"></div>
+                                            视频剪辑
+                                        </div>
+                                        <div class="task-step">
+                                            <span class="step-num">3</span>
+                                            音视频合成
+                                        </div>
+                                        <div class="task-step">
+                                            <span class="step-num">4</span>
+                                            效果渲染
+                                        </div>
+                                    </div>
+
+                                    <button class="ios-btn-secondary" onclick="showView('homeView')">
+                                        返回首页（后台继续处理）
+                                    </button>
+                                    <button class="ios-btn-text" onclick="showView('resultView')">
+                                        跳过演示，查看结果
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -310,93 +627,157 @@
 
                             <div class="ios-scroll-content with-nav">
                                 <!-- Video Preview -->
-                                <div class="ios-video-preview">
-                                    <div class="video-container">
-                                        <div class="video-placeholder-ios">
-                                            <div class="play-btn-ios">
-                                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                                    <polygon points="5,3 19,12 5,21"/>
-                                                </svg>
-                                            </div>
+                                <div class="video-preview">
+                                    <div class="video-thumb-large">
+                                        <div class="play-btn">
+                                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                                <polygon points="5,3 19,12 5,21"/>
+                                            </svg>
                                         </div>
                                     </div>
                                     <div class="video-meta">
-                                        <span class="duration">00:45</span>
-                                        <span class="quality">1080p</span>
-                                    </div>
-                                </div>
-
-                                <!-- Video Info -->
-                                <div class="ios-info-card">
-                                    <h3>香满楼火锅店_探店视频</h3>
-                                    <div class="info-row">
-                                        <span class="info-label">格式</span>
-                                        <span class="info-value">MP4 (H.264)</span>
-                                    </div>
-                                    <div class="info-row">
-                                        <span class="info-label">大小</span>
-                                        <span class="info-value">28.5 MB</span>
-                                    </div>
-                                    <div class="info-row">
-                                        <span class="info-label">创建时间</span>
-                                        <span class="info-value">今天 14:30</span>
+                                        <span>00:45</span>
+                                        <span>1080p</span>
+                                        <span>28.5MB</span>
                                     </div>
                                 </div>
 
                                 <!-- Publish Helper -->
-                                <div class="ios-publish-section">
+                                <div class="publish-section">
                                     <h3>发布辅助</h3>
-
                                     <div class="ios-card">
-                                        <div class="card-header-ios">
-                                            <span class="card-icon-ios">🔥</span>
-                                            <span>推荐热门话题</span>
+                                        <div class="card-title">🔥 推荐话题</div>
+                                        <div class="tags-wrap">
+                                            <span class="tag">#美食探店</span>
+                                            <span class="tag">#火锅</span>
+                                            <span class="tag">#吃货日常</span>
+                                            <span class="tag">#本地美食</span>
                                         </div>
-                                        <div class="ios-tags">
-                                            <span class="ios-tag">#美食探店</span>
-                                            <span class="ios-tag">#火锅</span>
-                                            <span class="ios-tag">#吃货日常</span>
-                                            <span class="ios-tag">#本地美食</span>
-                                        </div>
-                                        <button class="ios-copy-btn">复制全部</button>
+                                        <button class="copy-btn">复制全部</button>
                                     </div>
-
                                     <div class="ios-card">
-                                        <div class="card-header-ios">
-                                            <span class="card-icon-ios">✨</span>
-                                            <span>标题建议</span>
+                                        <div class="card-title">✨ 标题建议</div>
+                                        <div class="title-item">
+                                            <p>这家火锅店也太绝了！百年秘制锅底，8折优惠中！</p>
+                                            <button class="copy-btn-small">复制</button>
                                         </div>
-                                        <div class="ios-title-list">
-                                            <div class="title-item-ios">
-                                                <p>这家火锅店也太绝了！百年秘制锅底，8折优惠中！</p>
-                                                <button class="copy-single">复制</button>
-                                            </div>
-                                            <div class="title-item-ios">
-                                                <p>本地人私藏的宝藏火锅店！羊肉鲜嫩到犯规！</p>
-                                                <button class="copy-single">复制</button>
-                                            </div>
+                                        <div class="title-item">
+                                            <p>本地人私藏的宝藏火锅店！羊肉鲜嫩到犯规！</p>
+                                            <button class="copy-btn-small">复制</button>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Action Buttons -->
-                                <div class="ios-action-buttons">
-                                    <button class="ios-btn-primary">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-                                            <polyline points="7,10 12,15 17,10"/>
-                                            <line x1="12" y1="15" x2="12" y2="3"/>
-                                        </svg>
-                                        保存到相册
-                                    </button>
-                                    <button class="ios-btn-secondary" onclick="showView('homeView')">
-                                        返回首页
-                                    </button>
+                                <button class="ios-btn-primary">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                                        <polyline points="7,10 12,15 17,10"/>
+                                        <line x1="12" y1="15" x2="12" y2="3"/>
+                                    </svg>
+                                    保存到相册
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- History View (我的作品) -->
+                        <div class="ios-view" id="historyView">
+                            <div class="ios-nav-bar">
+                                <button class="nav-back" onclick="showView('homeView')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M15 18l-6-6 6-6"/>
+                                    </svg>
+                                </button>
+                                <span class="nav-title">我的作品</span>
+                                <div class="nav-spacer"></div>
+                            </div>
+
+                            <div class="ios-scroll-content with-nav">
+                                <!-- Task Status Tabs -->
+                                <div class="status-tabs">
+                                    <button class="tab-btn active">全部</button>
+                                    <button class="tab-btn">合成中</button>
+                                    <button class="tab-btn">已完成</button>
+                                </div>
+
+                                <div class="history-list">
+                                    <!-- Completed Task -->
+                                    <div class="history-item" onclick="showView('resultView')">
+                                        <div class="history-thumb">🍲</div>
+                                        <div class="history-info">
+                                            <span class="history-title">香满楼火锅店_探店视频</span>
+                                            <span class="history-meta">45秒 · 28.5MB · 今天 14:30</span>
+                                        </div>
+                                        <div class="history-status completed">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                                <polyline points="22,4 12,14.01 9,11.01"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+
+                                    <!-- Processing Task -->
+                                    <div class="history-item processing">
+                                        <div class="history-thumb">☕</div>
+                                        <div class="history-info">
+                                            <span class="history-title">咖啡小馆_新品推荐</span>
+                                            <span class="history-meta">合成中... 75%</span>
+                                            <div class="mini-progress">
+                                                <div class="mini-progress-fill" style="width: 75%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="history-status pending">
+                                            <div class="mini-spinner"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Queued Task -->
+                                    <div class="history-item queued">
+                                        <div class="history-thumb">💇</div>
+                                        <div class="history-info">
+                                            <span class="history-title">造型工作室_开业宣传</span>
+                                            <span class="history-meta">排队中 · 预计3分钟后开始</span>
+                                        </div>
+                                        <div class="history-status queued">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <polyline points="12,6 12,12 16,14"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+
+                                    <!-- Completed Tasks -->
+                                    <div class="history-item" onclick="showView('resultView')">
+                                        <div class="history-thumb">🎂</div>
+                                        <div class="history-info">
+                                            <span class="history-title">甜蜜蛋糕坊_生日蛋糕</span>
+                                            <span class="history-meta">30秒 · 18.8MB · 昨天 16:20</span>
+                                        </div>
+                                        <div class="history-status completed">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                                <polyline points="22,4 12,14.01 9,11.01"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+
+                                    <div class="history-item" onclick="showView('resultView')">
+                                        <div class="history-thumb">🍜</div>
+                                        <div class="history-info">
+                                            <span class="history-title">老街面馆_招牌牛肉面</span>
+                                            <span class="history-meta">42秒 · 25.2MB · 3天前</span>
+                                        </div>
+                                        <div class="history-status completed">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                                <polyline points="22,4 12,14.01 9,11.01"/>
+                                            </svg>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Membership View -->
+                        <!-- Member View -->
                         <div class="ios-view" id="memberView">
                             <div class="ios-nav-bar transparent">
                                 <button class="nav-back light" onclick="showView('homeView')">
@@ -468,77 +849,12 @@
                                             <span class="benefit-desc">导出视频无品牌水印</span>
                                         </div>
                                     </div>
-                                    <div class="benefit-item">
-                                        <span class="benefit-icon">🎨</span>
-                                        <div class="benefit-text">
-                                            <span class="benefit-title">高级模板</span>
-                                            <span class="benefit-desc">解锁全部视频风格模板</span>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <button class="ios-btn-subscribe">
                                     立即订阅
                                 </button>
-                                <p class="subscribe-note">订阅后可随时取消，按比例退款</p>
-                            </div>
-                        </div>
-
-                        <!-- History View -->
-                        <div class="ios-view" id="historyView">
-                            <div class="ios-nav-bar">
-                                <button class="nav-back" onclick="showView('homeView')">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                        <path d="M15 18l-6-6 6-6"/>
-                                    </svg>
-                                </button>
-                                <span class="nav-title">历史作品</span>
-                                <button class="nav-action">编辑</button>
-                            </div>
-
-                            <div class="ios-scroll-content with-nav">
-                                <div class="history-list">
-                                    <div class="history-item" onclick="showView('resultView')">
-                                        <div class="history-thumb">🍲</div>
-                                        <div class="history-info">
-                                            <span class="history-title">香满楼火锅店_探店视频</span>
-                                            <span class="history-meta">45秒 · 28.5MB · 今天 14:30</span>
-                                        </div>
-                                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M9 18l6-6-6-6"/>
-                                        </svg>
-                                    </div>
-                                    <div class="history-item">
-                                        <div class="history-thumb">☕</div>
-                                        <div class="history-info">
-                                            <span class="history-title">咖啡小馆_新品推荐</span>
-                                            <span class="history-meta">38秒 · 22.1MB · 昨天 10:15</span>
-                                        </div>
-                                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M9 18l6-6-6-6"/>
-                                        </svg>
-                                    </div>
-                                    <div class="history-item">
-                                        <div class="history-thumb">💇</div>
-                                        <div class="history-info">
-                                            <span class="history-title">造型工作室_开业宣传</span>
-                                            <span class="history-meta">52秒 · 35.2MB · 3天前</span>
-                                        </div>
-                                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M9 18l6-6-6-6"/>
-                                        </svg>
-                                    </div>
-                                    <div class="history-item">
-                                        <div class="history-thumb">🎂</div>
-                                        <div class="history-info">
-                                            <span class="history-title">甜蜜蛋糕坊_生日蛋糕</span>
-                                            <span class="history-meta">30秒 · 18.8MB · 5天前</span>
-                                        </div>
-                                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M9 18l6-6-6-6"/>
-                                        </svg>
-                                    </div>
-                                </div>
+                                <p class="subscribe-note">订阅后可随时取消</p>
                             </div>
                         </div>
                     </div>
@@ -551,7 +867,7 @@
                             </svg>
                             <span>首页</span>
                         </button>
-                        <button class="tab-item" onclick="showView('createView')">
+                        <button class="tab-item" onclick="showView('createStep1')">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="10"/>
                                 <line x1="12" y1="8" x2="12" y2="16"/>
@@ -559,13 +875,15 @@
                             </svg>
                             <span>创建</span>
                         </button>
-                        <button class="tab-item" onclick="showView('memberView')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
-                            </svg>
-                            <span>会员</span>
-                        </button>
                         <button class="tab-item" onclick="showView('historyView')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="3" y1="9" x2="21" y2="9"/>
+                                <line x1="9" y1="21" x2="9" y2="9"/>
+                            </svg>
+                            <span>作品</span>
+                        </button>
+                        <button class="tab-item" onclick="showView('memberView')">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
                                 <circle cx="12" cy="7" r="4"/>

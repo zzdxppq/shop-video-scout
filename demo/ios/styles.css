@@ -571,7 +571,98 @@ body {
     line-height: 1.4;
 }
 
-/* iOS Steps */
+/* ===== 6-Step Progress Bar ===== */
+.ios-steps-progress {
+    padding: 20px 16px;
+    background: var(--ios-card);
+    margin: 0 -16px 20px;
+    border-bottom: 0.5px solid var(--ios-gray-5);
+}
+
+.steps-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+}
+
+.step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--ios-gray-5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ios-gray);
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.step-item.active .step-num {
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.step-item.completed .step-num {
+    background: var(--ios-green);
+    color: white;
+}
+
+.step-item.completed .step-num::after {
+    content: '✓';
+    font-size: 14px;
+}
+
+.step-item.completed .step-num span {
+    display: none;
+}
+
+.step-label {
+    font-size: 10px;
+    color: var(--ios-gray);
+    margin-top: 6px;
+    text-align: center;
+    max-width: 50px;
+}
+
+.step-item.active .step-label {
+    color: var(--gradient-start);
+    font-weight: 500;
+}
+
+.step-item.completed .step-label {
+    color: var(--ios-green);
+}
+
+.progress-bar-bg {
+    height: 3px;
+    background: var(--ios-gray-5);
+    border-radius: 1.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+    border-radius: 1.5px;
+    transition: width 0.4s ease;
+}
+
+/* Legacy iOS Steps (for backwards compatibility) */
 .ios-steps {
     display: flex;
     align-items: center;
@@ -742,6 +833,7 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 24px;
+    position: relative;
 }
 
 .upload-item.add {
@@ -753,6 +845,17 @@ body {
     width: 28px;
     height: 28px;
     color: var(--ios-gray-2);
+}
+
+.upload-item .duration {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    font-size: 10px;
+    padding: 2px 4px;
+    border-radius: 4px;
 }
 
 /* iOS Buttons */
@@ -794,6 +897,436 @@ body {
     font-weight: 500;
     cursor: pointer;
     margin-top: 12px;
+}
+
+/* ===== AI Analysis View ===== */
+.analysis-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.analysis-animation {
+    margin-bottom: 32px;
+}
+
+.analysis-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.analysis-circle::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: var(--gradient-start);
+    animation: spin 1s linear infinite;
+}
+
+.analysis-icon {
+    font-size: 48px;
+}
+
+.analysis-content h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ios-text);
+    margin-bottom: 8px;
+}
+
+.analysis-content p {
+    font-size: 14px;
+    color: var(--ios-text-secondary);
+    margin-bottom: 24px;
+}
+
+.analysis-steps {
+    width: 100%;
+    max-width: 280px;
+}
+
+.analysis-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    text-align: left;
+}
+
+.analysis-step-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--ios-gray-5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--ios-gray);
+    flex-shrink: 0;
+}
+
+.analysis-step.completed .analysis-step-icon {
+    background: var(--ios-green);
+    color: white;
+}
+
+.analysis-step.active .analysis-step-icon {
+    background: var(--gradient-start);
+    color: white;
+}
+
+.analysis-step span {
+    font-size: 14px;
+    color: var(--ios-text-secondary);
+}
+
+.analysis-step.active span,
+.analysis-step.completed span {
+    color: var(--ios-text);
+}
+
+/* ===== Script View/Edit ===== */
+.script-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.script-header h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ios-text);
+}
+
+.edit-btn {
+    padding: 6px 14px;
+    background: var(--ios-gray-6);
+    border: none;
+    border-radius: 16px;
+    font-size: 14px;
+    color: var(--ios-blue);
+    cursor: pointer;
+}
+
+.edit-btn.editing {
+    background: var(--ios-blue);
+    color: white;
+}
+
+.script-content {
+    background: var(--ios-card);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.script-segment {
+    padding: 16px;
+    border-bottom: 0.5px solid var(--ios-gray-5);
+}
+
+.script-segment:last-child {
+    border-bottom: none;
+}
+
+.segment-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.segment-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 6px;
+}
+
+.segment-time {
+    font-size: 12px;
+    color: var(--ios-text-secondary);
+}
+
+.segment-text {
+    font-size: 15px;
+    color: var(--ios-text);
+    line-height: 1.5;
+}
+
+.segment-textarea {
+    width: 100%;
+    min-height: 60px;
+    padding: 12px;
+    background: var(--ios-gray-6);
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    color: var(--ios-text);
+    line-height: 1.5;
+    resize: none;
+}
+
+.segment-textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.3);
+}
+
+.script-actions {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    background: var(--ios-gray-6);
+}
+
+.script-actions button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.script-actions .cancel-btn {
+    background: var(--ios-card);
+    color: var(--ios-text);
+}
+
+.script-actions .save-btn {
+    background: var(--ios-blue);
+    color: white;
+}
+
+.regenerate-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    background: var(--ios-card);
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    color: var(--ios-blue);
+    cursor: pointer;
+    margin-top: 16px;
+}
+
+/* ===== Voice Selection ===== */
+.voice-section {
+    margin-top: 24px;
+}
+
+.voice-section h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ios-text);
+    margin-bottom: 12px;
+}
+
+.voice-list {
+    background: var(--ios-card);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.voice-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 0.5px solid var(--ios-gray-5);
+    cursor: pointer;
+}
+
+.voice-item:last-child {
+    border-bottom: none;
+}
+
+.voice-item.selected {
+    background: rgba(0, 122, 255, 0.08);
+}
+
+.voice-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--ios-gray-6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.voice-info {
+    flex: 1;
+}
+
+.voice-name {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ios-text);
+    margin-bottom: 2px;
+}
+
+.pro-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    color: #1a1a2e;
+    font-size: 9px;
+    font-weight: 700;
+    border-radius: 4px;
+}
+
+.voice-desc {
+    font-size: 13px;
+    color: var(--ios-text-secondary);
+}
+
+.voice-check {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--ios-gray-4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.voice-item.selected .voice-check {
+    background: var(--ios-blue);
+    border-color: var(--ios-blue);
+    color: white;
+}
+
+.voice-check svg {
+    width: 14px;
+    height: 14px;
+    display: none;
+}
+
+.voice-item.selected .voice-check svg {
+    display: block;
+}
+
+/* ===== Settings List ===== */
+.settings-section {
+    margin-top: 24px;
+}
+
+.settings-section h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ios-text);
+    margin-bottom: 12px;
+}
+
+.settings-list {
+    background: var(--ios-card);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 0.5px solid var(--ios-gray-5);
+}
+
+.setting-item:last-child {
+    border-bottom: none;
+}
+
+.setting-label {
+    font-size: 16px;
+    color: var(--ios-text);
+}
+
+.setting-value {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 16px;
+    color: var(--ios-text-secondary);
+}
+
+.setting-value svg {
+    width: 16px;
+    height: 16px;
+    color: var(--ios-gray-3);
+}
+
+/* iOS Toggle Switch */
+.ios-toggle {
+    position: relative;
+    width: 51px;
+    height: 31px;
+}
+
+.ios-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.ios-toggle .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--ios-gray-5);
+    transition: 0.3s;
+    border-radius: 31px;
+}
+
+.ios-toggle .slider:before {
+    position: absolute;
+    content: "";
+    height: 27px;
+    width: 27px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.ios-toggle input:checked + .slider {
+    background-color: var(--ios-green);
+}
+
+.ios-toggle input:checked + .slider:before {
+    transform: translateX(20px);
 }
 
 /* Processing View */
@@ -914,6 +1447,19 @@ body {
 .p-step.completed .p-step-text,
 .p-step.active .p-step-text {
     color: var(--ios-text);
+}
+
+.processing-hint {
+    margin-top: 32px;
+    padding: 16px 20px;
+    background: rgba(0, 122, 255, 0.1);
+    border-radius: 12px;
+}
+
+.processing-hint p {
+    font-size: 14px;
+    color: var(--ios-blue);
+    text-align: center;
 }
 
 /* Result View */
@@ -1269,7 +1815,34 @@ body {
     margin-top: 12px;
 }
 
-/* History View */
+/* ===== History View with Task Status ===== */
+.status-tabs {
+    display: flex;
+    background: var(--ios-gray-5);
+    border-radius: 10px;
+    padding: 2px;
+    margin-bottom: 16px;
+}
+
+.status-tab {
+    flex: 1;
+    padding: 10px 8px;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--ios-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.status-tab.active {
+    background: var(--ios-card);
+    color: var(--ios-text);
+    font-weight: 500;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
 .history-list {
     margin-top: 8px;
 }
@@ -1323,6 +1896,56 @@ body {
     height: 20px;
     color: var(--ios-gray-3);
     flex-shrink: 0;
+}
+
+/* Task Status Indicators */
+.history-status {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.history-status.completed {
+    background: var(--ios-green);
+    color: white;
+    font-size: 14px;
+}
+
+.history-status.pending {
+    background: var(--gradient-start);
+}
+
+.history-status.queued {
+    background: var(--ios-gray-4);
+    color: var(--ios-gray);
+    font-size: 14px;
+}
+
+/* Mini Progress Bar in History Item */
+.mini-progress {
+    width: 100%;
+    height: 4px;
+    background: var(--ios-gray-5);
+    border-radius: 2px;
+    margin-top: 6px;
+    overflow: hidden;
+}
+
+.mini-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+/* Processing item specific */
+.history-item.processing .history-meta {
+    color: var(--gradient-start);
+    font-weight: 500;
 }
 
 /* Tab Bar */
@@ -1381,6 +2004,36 @@ body {
     height: 5px;
     background: #000;
     border-radius: 3px;
+}
+
+/* ===== Synthesis Summary ===== */
+.synthesis-summary {
+    background: var(--ios-card);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--ios-gray-5);
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.summary-label {
+    font-size: 15px;
+    color: var(--ios-text-secondary);
+}
+
+.summary-value {
+    font-size: 15px;
+    color: var(--ios-text);
+    font-weight: 500;
 }
 
 /* Responsive adjustments */

@@ -464,6 +464,56 @@
                             </div>
                         </div>
 
+                        <!-- Script Edit Mode -->
+                        <div class="script-edit-mode" id="scriptEditMode" style="display:none;">
+                            <div class="edit-segment">
+                                <div class="segment-header">
+                                    <span class="segment-number">1</span>
+                                    <span class="segment-shot">🎬 门店展示</span>
+                                </div>
+                                <textarea rows="2">家人们！今天带你们探一家超火的火锅店——香满楼！</textarea>
+                            </div>
+                            <div class="edit-segment">
+                                <div class="segment-header">
+                                    <span class="segment-number">2</span>
+                                    <span class="segment-shot">🔥 火锅沸腾</span>
+                                </div>
+                                <textarea rows="2">看这锅底，红油翻滚，光是看着就让人口水直流！这可是传承百年的秘制配方！</textarea>
+                            </div>
+                            <div class="edit-segment">
+                                <div class="segment-header">
+                                    <span class="segment-number">3</span>
+                                    <span class="segment-shot">🥩 食材展示</span>
+                                </div>
+                                <textarea rows="2">他们家的羊肉必须吹爆！内蒙古草原直供，现切现涮，每一片都是这个厚度！</textarea>
+                            </div>
+                            <div class="edit-segment">
+                                <div class="segment-header">
+                                    <span class="segment-number">4</span>
+                                    <span class="segment-shot">🍲 菜品特写</span>
+                                </div>
+                                <textarea rows="2">涮个8秒，蘸上他们家的秘制麻酱，入口即化，鲜嫩多汁！</textarea>
+                            </div>
+                            <div class="edit-segment">
+                                <div class="segment-header">
+                                    <span class="segment-number">5</span>
+                                    <span class="segment-shot">🏠 环境展示</span>
+                                </div>
+                                <textarea rows="2">环境也很nice，包间私密性超好，约会聚餐都合适！</textarea>
+                            </div>
+                            <div class="edit-segment">
+                                <div class="segment-header">
+                                    <span class="segment-number">6</span>
+                                    <span class="segment-shot">📢 促销信息</span>
+                                </div>
+                                <textarea rows="2">现在新店开业，全场8折！锅底还免费升级！冲就完事了！地址我放评论区，记得收藏！</textarea>
+                            </div>
+                            <div class="edit-actions">
+                                <button class="btn-secondary" id="cancelScriptBtn">取消</button>
+                                <button class="btn-primary" id="saveScriptBtn">保存修改</button>
+                            </div>
+                        </div>
+
                         <div class="script-stats">
                             <div class="stat-item">
                                 <span class="stat-label">预计时长</span>
@@ -500,94 +550,108 @@
                         </div>
                     </div>
 
-                    <div class="voice-selection">
-                        <h3 class="section-subtitle">选择配音音色</h3>
-                        <div class="voice-options">
-                            <div class="voice-card active" data-voice="female-energetic">
-                                <div class="voice-avatar">👩</div>
-                                <div class="voice-info">
-                                    <span class="voice-name">活力女声</span>
-                                    <span class="voice-desc">年轻活泼，适合美食探店</span>
+                    <!-- Synthesis Options (shown initially) -->
+                    <div id="synthesisOptions">
+                        <div class="voice-selection">
+                            <h3 class="section-subtitle">选择配音音色</h3>
+                            <div class="voice-options">
+                                <div class="voice-card active" data-voice="female-energetic">
+                                    <div class="voice-avatar">👩</div>
+                                    <div class="voice-info">
+                                        <span class="voice-name">活力女声</span>
+                                        <span class="voice-desc">年轻活泼，适合美食探店</span>
+                                    </div>
+                                    <button class="voice-preview-btn">
+                                        <svg viewBox="0 0 24 24" fill="currentColor">
+                                            <polygon points="5,3 19,12 5,21"/>
+                                        </svg>
+                                    </button>
+                                    <div class="voice-check">✓</div>
                                 </div>
-                                <button class="voice-preview-btn">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <polygon points="5,3 19,12 5,21"/>
-                                    </svg>
-                                </button>
-                                <div class="voice-check">✓</div>
-                            </div>
-                            <div class="voice-card" data-voice="male-warm">
-                                <div class="voice-avatar">👨</div>
-                                <div class="voice-info">
-                                    <span class="voice-name">温暖男声</span>
-                                    <span class="voice-desc">稳重亲切，适合品质推荐</span>
+                                <div class="voice-card" data-voice="male-warm">
+                                    <div class="voice-avatar">👨</div>
+                                    <div class="voice-info">
+                                        <span class="voice-name">温暖男声</span>
+                                        <span class="voice-desc">稳重亲切，适合品质推荐</span>
+                                    </div>
+                                    <button class="voice-preview-btn">
+                                        <svg viewBox="0 0 24 24" fill="currentColor">
+                                            <polygon points="5,3 19,12 5,21"/>
+                                        </svg>
+                                    </button>
                                 </div>
-                                <button class="voice-preview-btn">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <polygon points="5,3 19,12 5,21"/>
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="voice-card" data-voice="female-sweet">
-                                <div class="voice-avatar">👧</div>
-                                <div class="voice-info">
-                                    <span class="voice-name">甜美女声</span>
-                                    <span class="voice-desc">可爱甜美，适合甜品饮品</span>
+                                <div class="voice-card" data-voice="female-sweet">
+                                    <div class="voice-avatar">👧</div>
+                                    <div class="voice-info">
+                                        <span class="voice-name">甜美女声</span>
+                                        <span class="voice-desc">可爱甜美，适合甜品饮品</span>
+                                    </div>
+                                    <button class="voice-preview-btn">
+                                        <svg viewBox="0 0 24 24" fill="currentColor">
+                                            <polygon points="5,3 19,12 5,21"/>
+                                        </svg>
+                                    </button>
                                 </div>
-                                <button class="voice-preview-btn">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <polygon points="5,3 19,12 5,21"/>
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="voice-card clone" data-voice="my-voice">
-                                <div class="voice-avatar">🎙️</div>
-                                <div class="voice-info">
-                                    <span class="voice-name">我的声音</span>
-                                    <span class="voice-desc">使用克隆的个人音色</span>
+                                <div class="voice-card clone" data-voice="my-voice">
+                                    <div class="voice-avatar">🎙️</div>
+                                    <div class="voice-info">
+                                        <span class="voice-name">我的声音</span>
+                                        <span class="voice-desc">使用克隆的个人音色</span>
+                                    </div>
+                                    <button class="voice-upload-btn">上传声音样本</button>
                                 </div>
-                                <button class="voice-upload-btn">上传声音样本</button>
                             </div>
+                        </div>
+
+                        <div class="synthesis-options">
+                            <h3 class="section-subtitle">合成设置</h3>
+                            <div class="options-grid">
+                                <div class="option-item">
+                                    <label>语速调节</label>
+                                    <div class="slider-container">
+                                        <input type="range" min="0.8" max="1.2" step="0.1" value="1.0">
+                                        <span class="slider-value">1.0x</span>
+                                    </div>
+                                </div>
+                                <div class="option-item">
+                                    <label>背景音乐</label>
+                                    <select>
+                                        <option value="none">无背景音乐</option>
+                                        <option value="upbeat" selected>轻快节奏</option>
+                                        <option value="chill">舒缓治愈</option>
+                                        <option value="dramatic">热血激昂</option>
+                                    </select>
+                                </div>
+                                <div class="option-item">
+                                    <label>音乐音量</label>
+                                    <div class="slider-container">
+                                        <input type="range" min="0" max="100" value="30">
+                                        <span class="slider-value">30%</span>
+                                    </div>
+                                </div>
+                                <div class="option-item">
+                                    <label>转场效果</label>
+                                    <select>
+                                        <option value="cut">直接切换</option>
+                                        <option value="fade" selected>淡入淡出</option>
+                                        <option value="slide">滑动过渡</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="synthesis-start">
+                            <button class="btn-primary btn-large" id="startSynthesisBtn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5,3 19,12 5,21"/>
+                                </svg>
+                                开始合成视频
+                            </button>
+                            <p class="synthesis-hint">合成后将在后台处理，完成后会通知您</p>
                         </div>
                     </div>
 
-                    <div class="synthesis-options">
-                        <h3 class="section-subtitle">合成设置</h3>
-                        <div class="options-grid">
-                            <div class="option-item">
-                                <label>语速调节</label>
-                                <div class="slider-container">
-                                    <input type="range" min="0.8" max="1.2" step="0.1" value="1.0">
-                                    <span class="slider-value">1.0x</span>
-                                </div>
-                            </div>
-                            <div class="option-item">
-                                <label>背景音乐</label>
-                                <select>
-                                    <option value="none">无背景音乐</option>
-                                    <option value="upbeat" selected>轻快节奏</option>
-                                    <option value="chill">舒缓治愈</option>
-                                    <option value="dramatic">热血激昂</option>
-                                </select>
-                            </div>
-                            <div class="option-item">
-                                <label>音乐音量</label>
-                                <div class="slider-container">
-                                    <input type="range" min="0" max="100" value="30">
-                                    <span class="slider-value">30%</span>
-                                </div>
-                            </div>
-                            <div class="option-item">
-                                <label>转场效果</label>
-                                <select>
-                                    <option value="cut">直接切换</option>
-                                    <option value="fade" selected>淡入淡出</option>
-                                    <option value="slide">滑动过渡</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
+                    <!-- Synthesis Progress (hidden initially) -->
                     <div class="synthesis-progress" id="synthesisProgress" style="display:none;">
                         <div class="progress-steps-vertical">
                             <div class="progress-step completed">

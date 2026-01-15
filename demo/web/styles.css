@@ -1636,3 +1636,74 @@ body {
         font-size: 0.9rem;
     }
 }
+
+/* Script Edit Mode */
+.script-edit-mode {
+    background: var(--gray-50);
+    border-radius: var(--radius-md);
+    padding: 16px;
+}
+
+.edit-segment {
+    background: white;
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    margin-bottom: 12px;
+    border-left: 3px solid var(--primary);
+}
+
+.edit-segment .segment-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.edit-segment textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    resize: vertical;
+    min-height: 60px;
+}
+
+.edit-segment textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.edit-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    justify-content: flex-end;
+}
+
+.edit-actions .btn-secondary,
+.edit-actions .btn-primary {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    flex: none;
+}
+
+/* Synthesis Start Section */
+.synthesis-start {
+    padding: 24px 20px;
+    text-align: center;
+    border-top: 1px solid var(--gray-100);
+}
+
+.synthesis-start .btn-large {
+    width: 100%;
+    max-width: 400px;
+}
+
+.synthesis-hint {
+    margin-top: 12px;
+    font-size: 0.8rem;
+    color: var(--gray-500);
+}

@@ -7,6 +7,7 @@ class ShopVideoScoutDemo {
         this.currentStep = 1;
         this.totalSteps = 6;
         this.isProcessing = false;
+        this.isEditingScript = false;
 
         this.init();
     }
@@ -90,7 +91,20 @@ class ShopVideoScoutDemo {
         });
 
         document.getElementById('editScriptBtn')?.addEventListener('click', () => {
-            this.showToast('编辑功能已启用');
+            this.toggleScriptEdit();
+        });
+
+        document.getElementById('saveScriptBtn')?.addEventListener('click', () => {
+            this.saveScriptEdit();
+        });
+
+        document.getElementById('cancelScriptBtn')?.addEventListener('click', () => {
+            this.cancelScriptEdit();
+        });
+
+        // Start synthesis button (in Step 5)
+        document.getElementById('startSynthesisBtn')?.addEventListener('click', () => {
+            this.startSynthesis();
         });
 
         // Slider value updates
@@ -140,6 +154,7 @@ class ShopVideoScoutDemo {
         // Create new / View history
         document.getElementById('createNewBtn')?.addEventListener('click', () => {
             this.currentStep = 1;
+            this.resetSynthesisState();
             this.updateUI();
             window.scrollTo(0, 0);
         });
@@ -165,19 +180,13 @@ class ShopVideoScoutDemo {
         // Validate current step
         if (!this.validateStep(this.currentStep)) return;
 
-        // Special handling for processing steps
+        // Special handling for Step 2 -> Step 3 (AI Analysis)
         if (this.currentStep === 2) {
-            // Start AI analysis
             this.startAIAnalysis();
             return;
         }
 
-        if (this.currentStep === 4) {
-            // Start synthesis
-            this.startSynthesis();
-            return;
-        }
-
+        // Normal step progression
         if (this.currentStep < this.totalSteps) {
             this.currentStep++;
             this.updateUI();
@@ -189,6 +198,10 @@ class ShopVideoScoutDemo {
 
         if (this.currentStep > 1) {
             this.currentStep--;
+            // Reset synthesis state when going back from step 5
+            if (this.currentStep === 4) {
+                this.resetSynthesisState();
+            }
             this.updateUI();
         }
     }
@@ -263,11 +276,15 @@ class ShopVideoScoutDemo {
 
     startSynthesis() {
         this.isProcessing = true;
-        this.currentStep = 5;
-        this.updateUI();
 
+        const synthesisOptions = document.getElementById('synthesisOptions');
         const synthesisProgress = document.getElementById('synthesisProgress');
+
+        // Hide options, show progress
+        synthesisOptions.style.display = 'none';
         synthesisProgress.style.display = 'block';
+
+        this.updateNavButtons();
 
         // Simulate synthesis progress
         const steps = document.querySelectorAll('#synthesisProgress .progress-step');
@@ -313,6 +330,117 @@ class ShopVideoScoutDemo {
         setTimeout(advanceStep, 800);
     }
 
+    resetSynthesisState() {
+        const synthesisOptions = document.getElementById('synthesisOptions');
+        const synthesisProgress = document.getElementById('synthesisProgress');
+
+        if (synthesisOptions) synthesisOptions.style.display = 'block';
+        if (synthesisProgress) synthesisProgress.style.display = 'none';
+
+        // Reset progress steps
+        const steps = document.querySelectorAll('#synthesisProgress .progress-step');
+        steps.forEach((step, index) => {
+            step.classList.remove('active', 'completed');
+            step.querySelector('.step-icon').innerHTML = index + 1;
+        });
+
+        const progressFill = document.querySelector('#synthesisProgress .progress-fill');
+        const progressText = document.querySelector('#synthesisProgress .progress-text');
+        if (progressFill) progressFill.style.width = '0%';
+        if (progressText) progressText.textContent = '合成进度: 0%';
+    }
+
+    toggleScriptEdit() {
+        const scriptContent = document.getElementById('scriptContent');
+        const scriptEditMode = document.getElementById('scriptEditMode');
+        const editBtn = document.getElementById('editScriptBtn');
+
+        if (!this.isEditingScript) {
+            // Enter edit mode
+            scriptContent.style.display = 'none';
+            scriptEditMode.style.display = 'block';
+            editBtn.style.display = 'none';
+            this.isEditingScript = true;
+            this.showToast('已进入编辑模式，可修改脚本内容');
+        }
+    }
+
+    saveScriptEdit() {
+        const scriptContent = document.getElementById('scriptContent');
+        const scriptEditMode = document.getElementById('scriptEditMode');
+        const editBtn = document.getElementById('editScriptBtn');
+
+        // Update script content from textareas
+        const textareas = scriptEditMode.querySelectorAll('textarea');
+        const segments = scriptContent.querySelectorAll('.segment-text');
+
+        textareas.forEach((textarea, index) => {
+            if (segments[index]) {
+                segments[index].textContent = textarea.value;
+            }
+        });
+
+        // Exit edit mode
+        scriptContent.style.display = 'block';
+        scriptEditMode.style.display = 'none';
+        editBtn.style.display = 'flex';
+        this.isEditingScript = false;
+
+        this.updateScriptStats();
+        this.showToast('脚本已保存');
+    }
+
+    cancelScriptEdit() {
+        const scriptContent = document.getElementById('scriptContent');
+        const scriptEditMode = document.getElementById('scriptEditMode');
+        const editBtn = document.getElementById('editScriptBtn');
+
+        // Restore original content to textareas
+        const textareas = scriptEditMode.querySelectorAll('textarea');
+        const segments = scriptContent.querySelectorAll('.segment-text');
+
+        textareas.forEach((textarea, index) => {
+            if (segments[index]) {
+                textarea.value = segments[index].textContent;
+            }
+        });
+
+        // Exit edit mode
+        scriptContent.style.display = 'block';
+        scriptEditMode.style.display = 'none';
+        editBtn.style.display = 'flex';
+        this.isEditingScript = false;
+
+        this.showToast('已取消编辑');
+    }
+
+    updateScriptStats() {
+        const segments = document.querySelectorAll('#scriptContent .segment-text');
+        let totalChars = 0;
+        segments.forEach(seg => {
+            totalChars += seg.textContent.length;
+        });
+
+        // Update stats display
+        const charsStat = document.querySelector('.script-stats .stat-value:nth-child(2)');
+        if (charsStat) {
+            // Find the chars stat
+            document.querySelectorAll('.script-stats .stat-item').forEach(item => {
+                if (item.querySelector('.stat-label').textContent === '脚本字数') {
+                    item.querySelector('.stat-value').textContent = totalChars + '字';
+                }
+            });
+        }
+
+        // Estimate duration (roughly 4 chars per second for Chinese)
+        const estimatedSeconds = Math.round(totalChars / 4);
+        document.querySelectorAll('.script-stats .stat-item').forEach(item => {
+            if (item.querySelector('.stat-label').textContent === '预计时长') {
+                item.querySelector('.stat-value').textContent = estimatedSeconds + '秒';
+            }
+        });
+    }
+
     updateUI() {
         // Update step indicators
         document.querySelectorAll('.progress-steps .step').forEach((step, index) => {
@@ -353,14 +481,15 @@ class ShopVideoScoutDemo {
 
         if (this.currentStep === this.totalSteps) {
             nextBtn.style.display = 'none';
+        } else if (this.currentStep === 5) {
+            // On Step 5, hide the main next button (use the synthesis button instead)
+            nextBtn.style.display = 'none';
         } else {
             nextBtn.style.display = 'flex';
             nextBtn.disabled = this.isProcessing;
 
             if (this.currentStep === 2) {
                 nextBtn.innerHTML = `开始分析 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
-            } else if (this.currentStep === 4) {
-                nextBtn.innerHTML = `开始合成 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
             } else {
                 nextBtn.innerHTML = `下一步 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
             }
