@@ -1142,7 +1142,7 @@ body {
     to { transform: rotate(360deg); }
 }
 
-.step-content {
+.step-info {
     flex: 1;
 }
 
