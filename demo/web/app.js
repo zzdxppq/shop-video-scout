@@ -198,6 +198,14 @@ class ShopVideoScoutDemo {
             this.showToast('历史记录功能即将上线');
         });
 
+        // Back to edit button (from Step 6)
+        document.getElementById('backToEditBtn')?.addEventListener('click', () => {
+            this.currentStep = 4;
+            this.resetSynthesisState();
+            this.updateUI();
+            this.showToast('已返回脚本编辑页');
+        });
+
         // Play button
         document.querySelector('.play-button-large')?.addEventListener('click', () => {
             this.showToast('演示模式：视频预览');

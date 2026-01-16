@@ -1913,3 +1913,235 @@ body {
     color: var(--primary);
     font-weight: 600;
 }
+
+/* ================================
+   Step 6: 预览导出页面 - 双栏布局
+   ================================ */
+
+.success-header {
+    background: linear-gradient(135deg, rgba(72, 187, 120, 0.1) 0%, rgba(56, 161, 105, 0.1) 100%);
+}
+
+/* 双栏布局容器 */
+.result-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .result-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 左栏：视频预览 */
+.result-left {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.result-left .video-preview-container {
+    padding: 0;
+}
+
+/* 视频信息 */
+.video-meta {
+    background: var(--gray-50);
+    border-radius: var(--radius-md);
+    padding: 16px;
+}
+
+.video-meta h4 {
+    font-size: 0.9rem;
+    color: var(--gray-700);
+    margin-bottom: 12px;
+}
+
+.meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.meta-label {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+}
+
+.meta-value {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--gray-700);
+}
+
+/* 返回修改按钮 */
+.btn-back-edit {
+    width: 100%;
+    padding: 12px;
+    background: none;
+    border: 1px dashed var(--gray-300);
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-back-edit:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(255, 107, 53, 0.02);
+}
+
+/* 右栏：发布辅助 */
+.result-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* 下载区域 */
+.download-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.download-section h4 {
+    font-size: 0.9rem;
+    color: var(--gray-700);
+    margin-bottom: 4px;
+}
+
+.btn-download {
+    width: 100%;
+    flex: none;
+}
+
+.btn-download-source {
+    width: 100%;
+    flex: none;
+}
+
+/* 分隔线 */
+.divider {
+    height: 1px;
+    background: var(--gray-200);
+    margin: 8px 0;
+}
+
+/* 辅助区域 */
+.assist-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.assist-section h4 {
+    font-size: 0.9rem;
+    color: var(--gray-700);
+}
+
+.assist-section .tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.assist-section .tag {
+    padding: 6px 12px;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.assist-section .tag:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(255, 107, 53, 0.05);
+}
+
+.assist-section .copy-all-btn {
+    width: 100%;
+    padding: 10px;
+    border: 1px dashed var(--gray-300);
+    background: white;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.assist-section .copy-all-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.assist-section .title-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.assist-section .title-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-200);
+}
+
+.assist-section .title-item p {
+    flex: 1;
+    font-size: 0.85rem;
+    color: var(--gray-700);
+    line-height: 1.4;
+    margin: 0;
+}
+
+.assist-section .title-item .copy-btn {
+    padding: 6px 10px;
+    border: 1px solid var(--gray-300);
+    background: white;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.assist-section .title-item .copy-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* 底部操作 */
+.result-footer {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding: 20px;
+    border-top: 1px solid var(--gray-100);
+}
+
+.result-footer .btn-outline {
+    padding: 12px 24px;
+    font-size: 0.9rem;
+}

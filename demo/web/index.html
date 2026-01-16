@@ -724,7 +724,7 @@
             <!-- Step 6: 预览导出 -->
             <section class="step-content" id="step6">
                 <div class="content-card">
-                    <div class="card-header">
+                    <div class="card-header success-header">
                         <div class="card-icon success">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
@@ -732,134 +732,139 @@
                             </svg>
                         </div>
                         <div>
-                            <h2>预览 & 导出成品</h2>
-                            <p>视频合成完成！预览效果后即可下载</p>
+                            <h2>视频制作完成 🎉</h2>
+                            <p>预览效果满意后即可下载发布</p>
                         </div>
                     </div>
 
-                    <div class="video-preview-container">
-                        <div class="video-player">
-                            <div class="video-placeholder">
-                                <div class="play-button-large">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <polygon points="5,3 19,12 5,21"/>
-                                    </svg>
-                                </div>
-                                <div class="video-overlay-info">
-                                    <span class="video-title">香满楼火锅店_探店视频.mp4</span>
-                                    <span class="video-duration">00:45</span>
+                    <!-- 双栏布局 -->
+                    <div class="result-layout">
+                        <!-- 左栏：视频预览 -->
+                        <div class="result-left">
+                            <div class="video-preview-container">
+                                <div class="video-player">
+                                    <div class="video-placeholder">
+                                        <div class="play-button-large">
+                                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                                <polygon points="5,3 19,12 5,21"/>
+                                            </svg>
+                                        </div>
+                                        <div class="video-overlay-info">
+                                            <span class="video-title">香满楼火锅店_探店视频.mp4</span>
+                                            <span class="video-duration">01:02</span>
+                                        </div>
+                                    </div>
+                                    <div class="video-controls">
+                                        <button class="control-btn play-btn">
+                                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                                <polygon points="5,3 19,12 5,21"/>
+                                            </svg>
+                                        </button>
+                                        <div class="progress-track">
+                                            <div class="progress-current" style="width: 0%"></div>
+                                        </div>
+                                        <span class="time-display">00:00 / 01:02</span>
+                                        <button class="control-btn fullscreen-btn">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="15,3 21,3 21,9"/>
+                                                <polyline points="9,21 3,21 3,15"/>
+                                                <line x1="21" y1="3" x2="14" y2="10"/>
+                                                <line x1="3" y1="21" x2="10" y2="14"/>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="video-controls">
-                                <button class="control-btn play-btn">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <polygon points="5,3 19,12 5,21"/>
-                                    </svg>
-                                </button>
-                                <div class="progress-track">
-                                    <div class="progress-current" style="width: 0%"></div>
+
+                            <!-- 视频信息 -->
+                            <div class="video-meta">
+                                <h4>📊 视频信息</h4>
+                                <div class="meta-grid">
+                                    <div class="meta-item">
+                                        <span class="meta-label">分辨率</span>
+                                        <span class="meta-value">1080×1920</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span class="meta-label">时长</span>
+                                        <span class="meta-value">1分02秒</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span class="meta-label">大小</span>
+                                        <span class="meta-value">45.6MB</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span class="meta-label">格式</span>
+                                        <span class="meta-value">MP4</span>
+                                    </div>
                                 </div>
-                                <span class="time-display">00:00 / 00:45</span>
-                                <button class="control-btn fullscreen-btn">
+                            </div>
+
+                            <button class="btn-back-edit" id="backToEditBtn">
+                                🔄 不满意？返回修改
+                            </button>
+                        </div>
+
+                        <!-- 右栏：发布辅助 -->
+                        <div class="result-right">
+                            <!-- 下载区域 -->
+                            <div class="download-section">
+                                <h4>📥 下载</h4>
+                                <button class="btn-primary btn-download" id="downloadBtn">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="15,3 21,3 21,9"/>
-                                        <polyline points="9,21 3,21 3,15"/>
-                                        <line x1="21" y1="3" x2="14" y2="10"/>
-                                        <line x1="3" y1="21" x2="10" y2="14"/>
+                                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                                        <polyline points="7,10 12,15 17,10"/>
+                                        <line x1="12" y1="15" x2="12" y2="3"/>
                                     </svg>
+                                    下载成品视频
+                                </button>
+                                <button class="btn-secondary btn-download-source" id="downloadSourceBtn">
+                                    下载素材包
                                 </button>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="export-section">
-                        <div class="export-info">
-                            <div class="info-row">
-                                <span class="info-label">视频格式</span>
-                                <span class="info-value">MP4 (H.264)</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">分辨率</span>
-                                <span class="info-value">1080 × 1920 (竖屏)</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">文件大小</span>
-                                <span class="info-value">约 28.5 MB</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">视频时长</span>
-                                <span class="info-value">45 秒</span>
-                            </div>
-                        </div>
+                            <div class="divider"></div>
 
-                        <div class="export-actions">
-                            <button class="btn-primary btn-large" id="downloadBtn">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-                                    <polyline points="7,10 12,15 17,10"/>
-                                    <line x1="12" y1="15" x2="12" y2="3"/>
-                                </svg>
-                                下载成品视频
-                            </button>
-                            <button class="btn-secondary" id="downloadSourceBtn">
-                                下载素材包
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- 发布辅助 -->
-                    <div class="publish-assist">
-                        <h3 class="section-subtitle">发布辅助</h3>
-
-                        <div class="assist-card">
-                            <div class="assist-header">
-                                <span class="assist-icon">🔥</span>
-                                <span class="assist-title">推荐热门话题</span>
-                            </div>
-                            <div class="tags-container">
-                                <span class="tag">#美食探店</span>
-                                <span class="tag">#火锅</span>
-                                <span class="tag">#吃货日常</span>
-                                <span class="tag">#本地美食</span>
-                                <span class="tag">#火锅店推荐</span>
-                                <span class="tag">#涮羊肉</span>
-                                <span class="tag">#新店开业</span>
-                                <span class="tag">#探店打卡</span>
-                            </div>
-                            <button class="copy-all-btn">一键复制全部标签</button>
-                        </div>
-
-                        <div class="assist-card">
-                            <div class="assist-header">
-                                <span class="assist-icon">✨</span>
-                                <span class="assist-title">标题建议</span>
-                            </div>
-                            <div class="title-suggestions">
-                                <div class="title-item">
-                                    <p>这家火锅店也太绝了！百年秘制锅底+草原直供羊肉，新店开业8折！</p>
-                                    <button class="copy-btn">复制</button>
+                            <!-- 推荐话题 -->
+                            <div class="assist-section">
+                                <h4>🏷️ 推荐话题</h4>
+                                <div class="tags-container">
+                                    <span class="tag">#海底捞</span>
+                                    <span class="tag">#火锅探店</span>
+                                    <span class="tag">#望京美食</span>
+                                    <span class="tag">#必吃榜</span>
+                                    <span class="tag">#美食推荐</span>
+                                    <span class="tag">#吃货日常</span>
                                 </div>
-                                <div class="title-item">
-                                    <p>本地人私藏的宝藏火锅店！羊肉鲜嫩到犯规，不去真的亏！</p>
-                                    <button class="copy-btn">复制</button>
-                                </div>
-                                <div class="title-item">
-                                    <p>火锅控必入！香满楼新店开业，锅底免费升级，冲！</p>
-                                    <button class="copy-btn">复制</button>
+                                <button class="copy-all-btn">📋 一键复制全部</button>
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <!-- 推荐标题 -->
+                            <div class="assist-section">
+                                <h4>📝 推荐标题</h4>
+                                <div class="title-suggestions">
+                                    <div class="title-item">
+                                        <p>望京这家海底捞太绝了！服务好到流泪</p>
+                                        <button class="copy-btn">📋</button>
+                                    </div>
+                                    <div class="title-item">
+                                        <p>人均89吃海底捞？这个团购太香了！</p>
+                                        <button class="copy-btn">📋</button>
+                                    </div>
+                                    <div class="title-item">
+                                        <p>火锅控必入！新店开业锅底免费升级</p>
+                                        <button class="copy-btn">📋</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 完成提示 -->
-                    <div class="completion-card">
-                        <div class="completion-icon">🎉</div>
-                        <h3>恭喜！您的视频已生成完成</h3>
-                        <p>下载视频后，可直接发布到抖音、小红书等平台</p>
-                        <div class="completion-actions">
-                            <button class="btn-outline" id="createNewBtn">创建新视频</button>
-                            <button class="btn-outline" id="viewHistoryBtn">查看历史</button>
-                        </div>
+                    <!-- 底部操作 -->
+                    <div class="result-footer">
+                        <button class="btn-outline" id="createNewBtn">➕ 创建新视频</button>
+                        <button class="btn-outline" id="viewHistoryBtn">🏠 返回首页</button>
                     </div>
                 </div>
             </section>
