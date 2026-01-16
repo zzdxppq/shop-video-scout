@@ -339,34 +339,40 @@ class ShopVideoScoutDemo {
 
         const advanceStep = () => {
             if (currentProgressStep < steps.length) {
-                // Complete current step
+                // Complete previous step
                 if (currentProgressStep > 0) {
                     steps[currentProgressStep - 1].classList.remove('active');
                     steps[currentProgressStep - 1].classList.add('completed');
                     steps[currentProgressStep - 1].querySelector('.step-icon').innerHTML = '✓';
                 }
 
-                // Activate next step
-                if (currentProgressStep < steps.length) {
-                    steps[currentProgressStep].classList.add('active');
-                    steps[currentProgressStep].querySelector('.step-icon').innerHTML = '<div class="spinner-mini"></div>';
+                // Activate current step
+                steps[currentProgressStep].classList.remove('completed');
+                steps[currentProgressStep].classList.add('active');
+                steps[currentProgressStep].querySelector('.step-icon').innerHTML = '<div class="spinner-mini"></div>';
 
-                    progressFill.style.width = progressValues[currentProgressStep] + '%';
-                    progressText.textContent = `合成进度: ${progressValues[currentProgressStep]}%`;
-                }
+                progressFill.style.width = progressValues[currentProgressStep] + '%';
+                progressText.textContent = `合成进度: ${progressValues[currentProgressStep]}%`;
 
                 currentProgressStep++;
-
-                if (currentProgressStep <= steps.length) {
-                    setTimeout(advanceStep, 1200);
-                } else {
-                    // All done
-                    setTimeout(() => {
-                        this.isProcessing = false;
-                        this.currentStep = 6;
-                        this.updateUI();
-                    }, 500);
+                setTimeout(advanceStep, 1200);
+            } else {
+                // Complete last step
+                if (steps.length > 0) {
+                    steps[steps.length - 1].classList.remove('active');
+                    steps[steps.length - 1].classList.add('completed');
+                    steps[steps.length - 1].querySelector('.step-icon').innerHTML = '✓';
                 }
+                progressFill.style.width = '100%';
+                progressText.textContent = '合成进度: 100%';
+
+                // Navigate to Step 6
+                setTimeout(() => {
+                    this.isProcessing = false;
+                    this.currentStep = 6;
+                    this.updateUI();
+                    this.showToast('视频合成完成！');
+                }, 800);
             }
         };
 
