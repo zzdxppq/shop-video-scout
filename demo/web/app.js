@@ -76,13 +76,48 @@ class ShopVideoScoutDemo {
         });
 
         // Voice upload button
-        const voiceUploadBtn = document.querySelector('.voice-upload-btn');
-        if (voiceUploadBtn) {
-            voiceUploadBtn.addEventListener('click', (e) => {
+        document.querySelectorAll('.voice-upload-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 this.showToast('声音克隆功能即将上线');
             });
+        });
+
+        // Subtitle style cards
+        document.querySelectorAll('.subtitle-style-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.subtitle-style-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+            });
+        });
+
+        // Subtitle toggle
+        const subtitleToggle = document.getElementById('subtitleToggle');
+        const subtitleStyles = document.getElementById('subtitleStyles');
+        if (subtitleToggle && subtitleStyles) {
+            subtitleToggle.addEventListener('change', () => {
+                subtitleStyles.style.display = subtitleToggle.checked ? 'block' : 'none';
+            });
         }
+
+        // Character count for promotion textarea
+        const promotionTextarea = document.getElementById('promotion');
+        const promotionCount = document.getElementById('promotionCount');
+        if (promotionTextarea && promotionCount) {
+            promotionTextarea.addEventListener('input', () => {
+                promotionCount.textContent = promotionTextarea.value.length;
+            });
+        }
+
+        // Shop type radio buttons
+        document.querySelectorAll('input[name="shopType"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                document.querySelectorAll('input[name="shopType"]').forEach(r => {
+                    r.closest('.style-option').classList.remove('active');
+                });
+                radio.closest('.style-option').classList.add('active');
+            });
+        });
 
         // Script actions
         document.getElementById('regenerateBtn')?.addEventListener('click', () => {
@@ -210,12 +245,12 @@ class ShopVideoScoutDemo {
         switch (step) {
             case 1:
                 const shopName = document.getElementById('shopName').value.trim();
-                const shopType = document.getElementById('shopType').value;
+                const shopTypeSelected = document.querySelector('input[name="shopType"]:checked');
                 if (!shopName) {
                     this.showToast('请填写店铺名称');
                     return false;
                 }
-                if (!shopType) {
+                if (!shopTypeSelected) {
                     this.showToast('请选择店铺类型');
                     return false;
                 }

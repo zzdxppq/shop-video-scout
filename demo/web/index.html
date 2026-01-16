@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>拍后合成 - Web版Demo</title>
+    <title>探店宝 - Web版Demo</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -16,7 +16,7 @@
                 </svg>
             </a>
             <div class="header-title">
-                <h1>拍后合成</h1>
+                <h1>探店宝</h1>
                 <span class="version-badge">Web Demo</span>
             </div>
             <div class="header-actions">
@@ -35,7 +35,7 @@
             <div class="progress-steps">
                 <div class="step active" data-step="1">
                     <div class="step-indicator">1</div>
-                    <span class="step-label">店铺信息</span>
+                    <span class="step-label">填写信息</span>
                 </div>
                 <div class="step-line"></div>
                 <div class="step" data-step="2">
@@ -50,12 +50,12 @@
                 <div class="step-line"></div>
                 <div class="step" data-step="4">
                     <div class="step-indicator">4</div>
-                    <span class="step-label">生成脚本</span>
+                    <span class="step-label">编辑脚本</span>
                 </div>
                 <div class="step-line"></div>
                 <div class="step" data-step="5">
                     <div class="step-indicator">5</div>
-                    <span class="step-label">配音合成</span>
+                    <span class="step-label">配音设置</span>
                 </div>
                 <div class="step-line"></div>
                 <div class="step" data-step="6">
@@ -93,57 +93,67 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="shopType">店铺类型 <span class="required">*</span></label>
-                            <select id="shopType">
-                                <option value="">请选择店铺类型</option>
-                                <option value="restaurant" selected>餐饮美食</option>
-                                <option value="retail">零售购物</option>
-                                <option value="beauty">美容美发</option>
-                                <option value="entertainment">休闲娱乐</option>
-                                <option value="service">生活服务</option>
-                                <option value="other">其他</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="promotion">当前优惠活动</label>
-                            <textarea id="promotion" rows="3" placeholder="例如：新店开业全场8折，满100减20">新店开业期间，全场菜品8折优惠！锅底免费升级，还有神秘礼品等你来拿~</textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="highlights">店铺特色/卖点</label>
-                            <textarea id="highlights" rows="3" placeholder="例如：30年老店、秘制配方、明星同款">传承百年秘制锅底配方，精选内蒙古草原羔羊肉，现切现涮，肉质鲜嫩。环境舒适，包间私密性好。</textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label>视频风格偏好</label>
+                            <label>店铺类型 <span class="required">*</span></label>
                             <div class="style-options">
                                 <label class="style-option active">
-                                    <input type="radio" name="videoStyle" value="energetic" checked>
+                                    <input type="radio" name="shopType" value="restaurant" checked>
                                     <span class="option-content">
-                                        <span class="option-icon">🔥</span>
-                                        <span class="option-text">热情活力</span>
+                                        <span class="option-icon">🍜</span>
+                                        <span class="option-text">餐饮美食</span>
                                     </span>
                                 </label>
                                 <label class="style-option">
-                                    <input type="radio" name="videoStyle" value="professional">
+                                    <input type="radio" name="shopType" value="beauty">
                                     <span class="option-content">
-                                        <span class="option-icon">💼</span>
-                                        <span class="option-text">专业品质</span>
+                                        <span class="option-icon">💇</span>
+                                        <span class="option-text">美容美发</span>
                                     </span>
                                 </label>
                                 <label class="style-option">
-                                    <input type="radio" name="videoStyle" value="cozy">
+                                    <input type="radio" name="shopType" value="entertainment">
                                     <span class="option-content">
-                                        <span class="option-icon">☕</span>
-                                        <span class="option-text">温馨治愈</span>
+                                        <span class="option-icon">🎮</span>
+                                        <span class="option-text">休闲娱乐</span>
                                     </span>
                                 </label>
                                 <label class="style-option">
-                                    <input type="radio" name="videoStyle" value="trendy">
+                                    <input type="radio" name="shopType" value="other">
                                     <span class="option-content">
-                                        <span class="option-icon">✨</span>
-                                        <span class="option-text">时尚潮流</span>
+                                        <span class="option-icon">📦</span>
+                                        <span class="option-text">其他</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="promotion">商品/优惠描述 (选填)</label>
+                            <textarea id="promotion" rows="3" placeholder="例如：人均89，招牌毛肚七上八下，新人9.9元锅底" maxlength="500">新店开业期间，全场菜品8折优惠！锅底免费升级，还有神秘礼品等你来拿~</textarea>
+                            <div class="char-count"><span id="promotionCount">48</span>/500</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>视频风格 <span class="required">*</span></label>
+                            <div class="style-options style-options-3">
+                                <label class="style-option active">
+                                    <input type="radio" name="videoStyle" value="recommend" checked>
+                                    <span class="option-content">
+                                        <span class="option-icon">🌟</span>
+                                        <span class="option-text">种草安利</span>
+                                    </span>
+                                </label>
+                                <label class="style-option">
+                                    <input type="radio" name="videoStyle" value="review">
+                                    <span class="option-content">
+                                        <span class="option-icon">📝</span>
+                                        <span class="option-text">真实测评</span>
+                                    </span>
+                                </label>
+                                <label class="style-option">
+                                    <input type="radio" name="videoStyle" value="vlog">
+                                    <span class="option-content">
+                                        <span class="option-icon">📷</span>
+                                        <span class="option-text">探店Vlog</span>
                                     </span>
                                 </label>
                             </div>
@@ -553,13 +563,13 @@
                     <!-- Synthesis Options (shown initially) -->
                     <div id="synthesisOptions">
                         <div class="voice-selection">
-                            <h3 class="section-subtitle">选择配音音色</h3>
+                            <h3 class="section-subtitle">标准音色</h3>
                             <div class="voice-options">
-                                <div class="voice-card active" data-voice="female-energetic">
+                                <div class="voice-card active" data-voice="xiaomei">
                                     <div class="voice-avatar">👩</div>
                                     <div class="voice-info">
-                                        <span class="voice-name">活力女声</span>
-                                        <span class="voice-desc">年轻活泼，适合美食探店</span>
+                                        <span class="voice-name">活泼女声</span>
+                                        <span class="voice-desc">xiaomei</span>
                                     </div>
                                     <button class="voice-preview-btn">
                                         <svg viewBox="0 0 24 24" fill="currentColor">
@@ -568,11 +578,11 @@
                                     </button>
                                     <div class="voice-check">✓</div>
                                 </div>
-                                <div class="voice-card" data-voice="male-warm">
+                                <div class="voice-card" data-voice="xiaoshuai">
                                     <div class="voice-avatar">👨</div>
                                     <div class="voice-info">
-                                        <span class="voice-name">温暖男声</span>
-                                        <span class="voice-desc">稳重亲切，适合品质推荐</span>
+                                        <span class="voice-name">阳光男声</span>
+                                        <span class="voice-desc">xiaoshuai</span>
                                     </div>
                                     <button class="voice-preview-btn">
                                         <svg viewBox="0 0 24 24" fill="currentColor">
@@ -580,11 +590,11 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <div class="voice-card" data-voice="female-sweet">
-                                    <div class="voice-avatar">👧</div>
+                                <div class="voice-card" data-voice="xiaoya">
+                                    <div class="voice-avatar">👩‍💼</div>
                                     <div class="voice-info">
-                                        <span class="voice-name">甜美女声</span>
-                                        <span class="voice-desc">可爱甜美，适合甜品饮品</span>
+                                        <span class="voice-name">知性女声</span>
+                                        <span class="voice-desc">xiaoya</span>
                                     </div>
                                     <button class="voice-preview-btn">
                                         <svg viewBox="0 0 24 24" fill="currentColor">
@@ -592,62 +602,78 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <div class="voice-card clone" data-voice="my-voice">
-                                    <div class="voice-avatar">🎙️</div>
+                            </div>
+
+                            <h3 class="section-subtitle" style="margin-top: 24px;">我的声音</h3>
+                            <div class="voice-options">
+                                <div class="voice-card" data-voice="my-voice-1">
+                                    <div class="voice-avatar">🎤</div>
                                     <div class="voice-info">
-                                        <span class="voice-name">我的声音</span>
-                                        <span class="voice-desc">使用克隆的个人音色</span>
+                                        <span class="voice-name">声音1</span>
+                                        <span class="voice-desc">已克隆</span>
                                     </div>
-                                    <button class="voice-upload-btn">上传声音样本</button>
+                                    <button class="voice-preview-btn">
+                                        <svg viewBox="0 0 24 24" fill="currentColor">
+                                            <polygon points="5,3 19,12 5,21"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="voice-card clone" data-voice="upload-new">
+                                    <div class="voice-avatar">➕</div>
+                                    <div class="voice-info">
+                                        <span class="voice-name">上传新声音</span>
+                                        <span class="voice-desc">声音样本</span>
+                                    </div>
+                                    <button class="voice-upload-btn">上传</button>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="synthesis-options">
-                            <h3 class="section-subtitle">合成设置</h3>
-                            <div class="options-grid">
-                                <div class="option-item">
-                                    <label>语速调节</label>
-                                    <div class="slider-container">
-                                        <input type="range" min="0.8" max="1.2" step="0.1" value="1.0">
-                                        <span class="slider-value">1.0x</span>
+                        <!-- 字幕设置 -->
+                        <div class="subtitle-settings">
+                            <h3 class="section-subtitle">字幕设置</h3>
+                            <div class="subtitle-toggle">
+                                <label class="toggle-label">
+                                    <span>字幕开关</span>
+                                    <div class="toggle-switch">
+                                        <input type="checkbox" id="subtitleToggle" checked>
+                                        <span class="toggle-slider"></span>
                                     </div>
-                                </div>
-                                <div class="option-item">
-                                    <label>背景音乐</label>
-                                    <select>
-                                        <option value="none">无背景音乐</option>
-                                        <option value="upbeat" selected>轻快节奏</option>
-                                        <option value="chill">舒缓治愈</option>
-                                        <option value="dramatic">热血激昂</option>
-                                    </select>
-                                </div>
-                                <div class="option-item">
-                                    <label>音乐音量</label>
-                                    <div class="slider-container">
-                                        <input type="range" min="0" max="100" value="30">
-                                        <span class="slider-value">30%</span>
+                                    <span class="toggle-hint">为视频添加字幕</span>
+                                </label>
+                            </div>
+                            <div class="subtitle-styles" id="subtitleStyles">
+                                <label>字幕样式</label>
+                                <div class="style-cards">
+                                    <div class="subtitle-style-card active" data-style="simple">
+                                        <div class="style-preview simple">简约白字</div>
+                                        <span class="style-name">简约</span>
                                     </div>
-                                </div>
-                                <div class="option-item">
-                                    <label>转场效果</label>
-                                    <select>
-                                        <option value="cut">直接切换</option>
-                                        <option value="fade" selected>淡入淡出</option>
-                                        <option value="slide">滑动过渡</option>
-                                    </select>
+                                    <div class="subtitle-style-card" data-style="energetic">
+                                        <div class="style-preview energetic">活力黄字</div>
+                                        <span class="style-name">活力</span>
+                                    </div>
+                                    <div class="subtitle-style-card" data-style="xiaohongshu">
+                                        <div class="style-preview xiaohongshu">小红书风</div>
+                                        <span class="style-name">小红书</span>
+                                    </div>
+                                    <div class="subtitle-style-card" data-style="douyin">
+                                        <div class="style-preview douyin">抖音热门</div>
+                                        <span class="style-name">抖音</span>
+                                    </div>
+                                    <div class="subtitle-style-card" data-style="neon">
+                                        <div class="style-preview neon">霓虹炫彩</div>
+                                        <span class="style-name">霓虹</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="synthesis-start">
                             <button class="btn-primary btn-large" id="startSynthesisBtn">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polygon points="5,3 19,12 5,21"/>
-                                </svg>
-                                开始合成视频
+                                🎬 生成视频
                             </button>
-                            <p class="synthesis-hint">合成后将在后台处理，完成后会通知您</p>
+                            <p class="synthesis-hint">点击后开始配音合成和视频剪辑</p>
                         </div>
                     </div>
 
