@@ -1,0 +1,156 @@
+epic_id: 3
+title: "AI脚本生成与编辑"
+description: |
+  集成豆包API生成探店口播脚本，脚本分段对应具体镜头，
+  支持用户手动编辑和重新生成。
+
+stories:
+  - id: "3.1"
+    title: "AI脚本生成服务"
+    repository_type: monolith
+    estimated_complexity: medium
+    priority: P0
+
+    acceptance_criteria:
+      - id: AC1
+        title: "调用豆包API生成脚本"
+        scenario:
+          given: "镜头分析已完成"
+          when: "系统生成脚本"
+          then:
+            - "构建包含店铺信息和镜头摘要的Prompt"
+            - "调用豆包API生成脚本"
+            - "解析返回的脚本内容"
+            - "存储到任务记录"
+
+        business_rules:
+          - id: "BR-1.1"
+            rule: "脚本分5-7个段落"
+          - id: "BR-1.2"
+            rule: "每段标注对应镜头"
+          - id: "BR-1.3"
+            rule: "总时长控制在60秒左右"
+          - id: "BR-1.4"
+            rule: "脚本风格根据video_style调整"
+
+        error_handling:
+          - scenario: "AI服务超时"
+            code: "504"
+            message: "生成超时，正在重试"
+            action: "自动重试2次"
+          - scenario: "生成内容不符合要求"
+            code: "422"
+            message: "生成内容异常，正在重新生成"
+            action: "更换Prompt参数重试"
+
+        examples:
+          - input: "店铺信息 + 镜头摘要"
+            expected: |
+              【开场】(对应镜头: 达人出镜#1, 预计8秒)
+              "家人们！今天给你们探一家望京超火的海底捞..."
+
+              【环境展示】(对应镜头: 环境#1, 预计6秒)
+              "一进门就被这个装修惊艳到了..."
+
+      - id: AC2
+        title: "重新生成脚本"
+        scenario:
+          given: "用户对当前脚本不满意"
+          when: "用户点击重新生成"
+          then:
+            - "调整Prompt参数"
+            - "重新调用AI生成"
+            - "更新脚本内容"
+
+        business_rules:
+          - id: "BR-2.1"
+            rule: "每个任务最多重新生成5次"
+          - id: "BR-2.2"
+            rule: "保留上一版本脚本供对比"
+
+        error_handling:
+          - scenario: "重新生成次数超限"
+            code: "429"
+            message: "重新生成次数已达上限，请手动编辑"
+            action: "禁用重新生成按钮"
+
+    provides_apis:
+      - "GET /api/v1/tasks/{id}/script"
+      - "POST /api/v1/tasks/{id}/regenerate-script"
+    consumes_apis: []
+    dependencies:
+      - "2.3"
+    sm_hints:
+      front_end_spec: null
+      architecture: null
+
+  - id: "3.2"
+    title: "脚本编辑页面"
+    repository_type: monolith
+    estimated_complexity: medium
+    priority: P0
+
+    acceptance_criteria:
+      - id: AC1
+        title: "脚本展示与编辑"
+        scenario:
+          given: "AI脚本生成完成"
+          when: "用户查看脚本"
+          then:
+            - "分段落展示脚本内容"
+            - "每段显示对应镜头标记"
+            - "支持点击编辑修改内容"
+            - "支持撤销修改"
+
+        business_rules:
+          - id: "BR-1.1"
+            rule: "编辑时显示字数统计"
+          - id: "BR-1.2"
+            rule: "每段建议字数提示（配音时长参考）"
+
+        error_handling:
+          - scenario: "内容为空"
+            code: "VALIDATION_ERROR"
+            message: "脚本内容不能为空"
+            action: "保存按钮禁用"
+
+        interaction:
+          - trigger: "点击编辑按钮"
+            behavior: "文本区域变为可编辑状态"
+          - trigger: "编辑中"
+            behavior: "显示字数统计和保存按钮"
+          - trigger: "点击保存"
+            behavior: "保存修改，显示成功提示"
+
+      - id: AC2
+        title: "保存脚本修改"
+        scenario:
+          given: "用户编辑了脚本"
+          when: "用户点击保存"
+          then:
+            - "提交修改到后端"
+            - "更新任务脚本"
+            - "显示保存成功"
+
+        business_rules:
+          - id: "BR-2.1"
+            rule: "自动保存草稿到本地"
+          - id: "BR-2.2"
+            rule: "页面离开前提示未保存内容"
+
+        error_handling:
+          - scenario: "保存失败"
+            code: "500"
+            message: "保存失败，请重试"
+            action: "显示重试按钮，不清除本地内容"
+
+    provides_apis: []
+    consumes_apis:
+      - "GET /api/v1/tasks/{id}/script"
+      - "PUT /api/v1/tasks/{id}/script"
+      - "POST /api/v1/tasks/{id}/regenerate-script"
+    dependencies:
+      - "3.1"
+    sm_hints:
+      front_end_spec: null
+      architecture: null

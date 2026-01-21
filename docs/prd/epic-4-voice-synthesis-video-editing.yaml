@@ -1,0 +1,425 @@
+epic_id: 4
+title: "配音合成与视频剪辑"
+description: |
+  集成豆包语音合成服务（火山引擎Seed-TTS）实现TTS配音和声音克隆功能（仅需5秒样本即可克隆），
+  使用FFmpeg实现视频片段裁剪和音视频合成，输出成品视频。
+
+stories:
+  - id: "4.1"
+    title: "TTS配音服务实现"
+    repository_type: monolith
+    estimated_complexity: high
+    priority: P0
+
+    acceptance_criteria:
+      - id: AC1
+        title: "标准音色配音"
+        scenario:
+          given: "用户确认脚本并选择音色"
+          when: "开始配音合成"
+          then:
+            - "将脚本文本发送到豆包语音合成服务"
+            - "使用选择的标准音色"
+            - "生成配音音频文件"
+            - "获取各段落配音时长"
+            - "上传音频到OSS"
+
+        business_rules:
+          - id: "BR-1.1"
+            rule: "标准音色：活泼女声、阳光男声、知性女声（基于火山引擎100+预设音色库）"
+          - id: "BR-1.2"
+            rule: "配音采样率48000Hz"
+          - id: "BR-1.3"
+            rule: "输出格式MP3"
+
+        error_handling:
+          - scenario: "TTS服务超时"
+            code: "504"
+            message: "配音生成超时，正在重试"
+            action: "自动重试3次"
+          - scenario: "文本过长"
+            code: "400"
+            message: "单次配音文本不能超过5000字"
+            action: "分段处理"
+
+        examples:
+          - input: |
+              {"text": "家人们！今天给你们探一家...", "voice_type": "xiaomei"}
+            expected: |
+              {"audio_url": "https://oss.../voice/xxx.mp3", "duration_seconds": 8}
+
+      - id: AC2
+        title: "配音进度跟踪"
+        scenario:
+          given: "配音合成进行中"
+          when: "查询进度"
+          then:
+            - "返回已完成段落数"
+            - "返回总段落数"
+            - "返回预计剩余时间"
+
+        business_rules:
+          - id: "BR-2.1"
+            rule: "每段配音完成后更新进度"
+
+        error_handling:
+          - scenario: "某段配音失败"
+            code: "500"
+            message: "第N段配音失败，正在重试"
+            action: "单段重试，不影响整体"
+
+    provides_apis:
+      - "POST /api/v1/tasks/{id}/compose"
+      - "PUT /api/v1/tasks/{id}/voice-type"
+      - "GET /api/v1/tasks/{id}/compose-progress"
+    consumes_apis: []
+    dependencies:
+      - "3.1"
+    sm_hints:
+      front_end_spec: null
+      architecture: null
+
+  - id: "4.2"
+    title: "声音克隆功能"
+    repository_type: monolith
+    estimated_complexity: high
+    priority: P1
+
+    acceptance_criteria:
+      - id: AC1
+        title: "上传声音样本"
+        scenario:
+          given: "用户想使用自己的声音"
+          when: "用户上传声音样本"
+          then:
+            - "获取OSS上传URL"
+            - "上传音频文件"
+            - "验证时长在30秒-2分钟之间"
+            - "创建声音样本记录"
+
+        business_rules:
+          - id: "BR-1.1"
+            rule: "支持MP3、WAV、M4A格式"
+          - id: "BR-1.2"
+            rule: "时长5秒-2分钟（豆包Seed-TTS仅需5秒即可高质量克隆）"
+          - id: "BR-1.3"
+            rule: "每个用户最多保存3个声音样本"
+
+        data_validation:
+          - field: "audio_file"
+            type: "file"
+            required: true
+            rules: "mp3/wav/m4a格式，5秒-2分钟"
+            error_message: "请上传5秒-2分钟的音频文件"
+
+        error_handling:
+          - scenario: "时长不符"
+            code: "400"
+            message: "声音样本时长需要在5秒到2分钟之间"
+            action: "返回具体时长和要求"
+
+      - id: AC2
+        title: "声音克隆处理"
+        scenario:
+          given: "声音样本上传成功"
+          when: "系统处理克隆"
+          then:
+            - "调用豆包声音复刻API (Seed-ICL)"
+            - "获取克隆音色ID"
+            - "更新样本状态为completed"
+            - "通知用户克隆完成"
+
+        business_rules:
+          - id: "BR-2.1"
+            rule: "克隆处理预计1-3分钟"
+          - id: "BR-2.2"
+            rule: "克隆成功后可永久使用"
+
+        error_handling:
+          - scenario: "克隆失败"
+            code: "500"
+            message: "声音克隆失败，请确保样本清晰无杂音"
+            action: "提示用户重新上传更清晰的样本"
+
+      - id: AC3
+        title: "使用克隆声音配音"
+        scenario:
+          given: "用户已有克隆成功的声音"
+          when: "选择我的声音进行配音"
+          then:
+            - "使用克隆音色ID调用TTS"
+            - "生成配音音频"
+
+        business_rules:
+          - id: "BR-3.1"
+            rule: "克隆声音和标准音色使用相同TTS流程"
+
+        error_handling:
+          - scenario: "克隆音色不可用"
+            code: "400"
+            message: "您的声音样本正在处理中，请稍后"
+            action: "返回处理状态"
+
+    provides_apis:
+      - "POST /api/v1/voice/upload-url"
+      - "POST /api/v1/voice/samples"
+      - "GET /api/v1/voice/samples"
+      - "GET /api/v1/voice/samples/{id}"
+      - "DELETE /api/v1/voice/samples/{id}"
+      - "GET /api/v1/voice/samples/{id}/preview"
+    consumes_apis: []
+    dependencies:
+      - "4.1"
+    sm_hints:
+      front_end_spec: null
+      architecture: null
+
+  - id: "4.3"
+    title: "视频自动剪辑合成"
+    repository_type: monolith
+    estimated_complexity: high
+    priority: P0
+
+    acceptance_criteria:
+      - id: AC1
+        title: "视频片段裁剪"
+        scenario:
+          given: "配音完成，获得各段时长"
+          when: "系统裁剪视频"
+          then:
+            - "根据脚本段落获取对应镜头"
+            - "按配音时长裁剪视频片段"
+            - "使用FFmpeg提取指定时间段"
+            - "存储裁剪后的片段"
+
+        business_rules:
+          - id: "BR-1.1"
+            rule: "优先使用推荐镜头"
+          - id: "BR-1.2"
+            rule: "片段时长=配音时长+0.5秒过渡"
+          - id: "BR-1.3"
+            rule: "从视频中心位置开始裁剪"
+
+        error_handling:
+          - scenario: "视频时长不足"
+            code: "422"
+            message: "镜头时长不足，已自动调整"
+            action: "循环播放或使用最大可用时长"
+
+      - id: AC2
+        title: "音视频合成"
+        scenario:
+          given: "所有片段和配音准备完成"
+          when: "系统合成视频"
+          then:
+            - "按脚本顺序拼接视频片段"
+            - "叠加配音音轨"
+            - "输出竖屏1080x1920格式"
+            - "上传成品到OSS"
+
+        business_rules:
+          - id: "BR-2.1"
+            rule: "输出格式H.264编码MP4"
+          - id: "BR-2.2"
+            rule: "分辨率1080x1920(竖屏)"
+          - id: "BR-2.3"
+            rule: "视频码率4Mbps"
+
+        error_handling:
+          - scenario: "合成失败"
+            code: "500"
+            message: "视频合成失败，正在重试"
+            action: "自动重试2次，失败后人工介入"
+
+        examples:
+          - input: "视频片段列表 + 配音音频"
+            expected: |
+              {"output_url": "https://oss.../output/12345.mp4", "duration_seconds": 62, "file_size_bytes": 47841280}
+
+      - id: AC3
+        title: "字幕生成与烧录"
+        scenario:
+          given: "脚本分段和配音时长已确定，用户已选择字幕设置"
+          when: "系统合成视频"
+          then:
+            - "基于脚本分段生成ASS格式字幕文件"
+            - "字幕时间轴与配音时长对齐"
+            - "使用FFmpeg将字幕烧录到视频中"
+            - "字幕采用双行滚动显示效果"
+            - "应用用户选择的字幕样式模板"
+
+        business_rules:
+          - id: "BR-3.1"
+            rule: "字幕时间轴基于每段脚本的配音起止时间自动计算"
+          - id: "BR-3.2"
+            rule: "双行滚动：当前播放行高亮显示，下一行预显示（半透明）"
+          - id: "BR-3.3"
+            rule: "字幕位置固定在视频底部居中"
+          - id: "BR-3.4"
+            rule: "如果用户关闭字幕，则跳过字幕烧录步骤"
+          - id: "BR-3.5"
+            rule: "单行字幕最大20个汉字，超出自动换行"
+
+        error_handling:
+          - scenario: "字幕生成失败"
+            code: "500"
+            message: "字幕生成失败，视频将不含字幕"
+            action: "记录日志，继续合成无字幕视频，不阻塞流程"
+
+        examples:
+          - input: |
+              脚本段落：
+              段落1: "家人们！今天给你们探一家望京超火的海底捞..." (0-8秒)
+              段落2: "一进门就被这个装修惊艳到了..." (8-14秒)
+            expected: |
+              生成ASS字幕文件，FFmpeg烧录命令：
+              ffmpeg -i input.mp4 -vf "subtitles=subtitle.ass" output.mp4
+
+    provides_apis:
+      - "GET /api/v1/tasks/{id}/output"
+    consumes_apis: []
+    dependencies:
+      - "4.1"
+    sm_hints:
+      front_end_spec: null
+      architecture: null
+
+  - id: "4.4"
+    title: "配音设置UI组件"
+    repository_type: monolith
+    estimated_complexity: medium
+    priority: P0
+
+    acceptance_criteria:
+      - id: AC1
+        title: "音色选择界面"
+        scenario:
+          given: "用户在任务处理页面"
+          when: "用户选择配音音色"
+          then:
+            - "显示标准音色列表（带试听按钮）"
+            - "显示我的声音选项（如已克隆）"
+            - "未克隆时显示上传入口"
+
+        business_rules:
+          - id: "BR-1.1"
+            rule: "默认选中活泼女声"
+          - id: "BR-1.2"
+            rule: "克隆中的声音显示处理进度"
+
+        interaction:
+          - trigger: "点击试听按钮"
+            behavior: "播放该音色的示例音频"
+          - trigger: "选择音色"
+            behavior: "高亮显示选中项"
+          - trigger: "点击上传样本"
+            behavior: "打开声音克隆弹窗"
+
+      - id: AC2
+        title: "声音克隆上传弹窗"
+        scenario:
+          given: "用户点击上传声音样本"
+          when: "弹窗显示"
+          then:
+            - "显示上传要求说明"
+            - "显示录音/文件上传选项"
+            - "显示上传进度"
+            - "上传完成后显示克隆进度"
+
+        business_rules:
+          - id: "BR-2.1"
+            rule: "显示清晰的时长要求提示（5秒-2分钟，5秒即可高质量克隆）"
+          - id: "BR-2.2"
+            rule: "上传后自动开始克隆"
+
+        interaction:
+          - trigger: "选择文件"
+            behavior: "验证格式和时长，开始上传"
+          - trigger: "克隆中"
+            behavior: "显示进度条，预计时间"
+          - trigger: "克隆完成"
+            behavior: "关闭弹窗，自动选中新声音"
+
+    provides_apis: []
+    consumes_apis:
+      - "GET /api/v1/voice/samples"
+      - "POST /api/v1/voice/upload-url"
+      - "POST /api/v1/voice/samples"
+    dependencies:
+      - "4.2"
+    sm_hints:
+      front_end_spec: null
+      architecture: null
+
+  - id: "4.5"
+    title: "字幕设置UI组件"
+    repository_type: monolith
+    estimated_complexity: medium
+    priority: P0
+
+    acceptance_criteria:
+      - id: AC1
+        title: "字幕开关控制"
+        scenario:
+          given: "用户在配音设置页面"
+          when: "用户查看字幕设置"
+          then:
+            - "显示字幕开关，默认开启状态"
+            - "开关旁显示说明文字：'为视频添加字幕'"
+            - "关闭时字幕样式选择区域置灰禁用"
+
+        business_rules:
+          - id: "BR-1.1"
+            rule: "字幕开关默认为开启状态"
+          - id: "BR-1.2"
+            rule: "开关状态保存到任务配置中"
+
+        error_handling:
+          - scenario: "状态保存失败"
+            code: "500"
+            message: "设置保存失败，请重试"
+            action: "显示Toast提示，保持原状态"
+
+        interaction:
+          - trigger: "切换开关"
+            behavior: "开启时样式选择区域激活，关闭时置灰"
+
+      - id: AC2
+        title: "字幕样式模板选择"
+        scenario:
+          given: "字幕功能已开启"
+          when: "用户选择字幕样式"
+          then:
+            - "显示5种预设样式模板卡片"
+            - "每个卡片显示样式名称和预览效果图"
+            - "默认选中'简约白字'样式"
+            - "点击卡片切换选中状态"
+
+        business_rules:
+          - id: "BR-2.1"
+            rule: "预设模板：简约白字、活力黄字、小红书风、抖音热门、霓虹炫彩"
+          - id: "BR-2.2"
+            rule: "默认选中第一个模板（简约白字）"
+          - id: "BR-2.3"
+            rule: "样式选择保存到任务配置中"
+
+        error_handling:
+          - scenario: "样式预览图加载失败"
+            code: "LOAD_ERROR"
+            message: "样式加载失败"
+            action: "显示占位图，功能不受影响"
+
+        interaction:
+          - trigger: "点击样式卡片"
+            behavior: "选中该样式，显示选中边框（蓝色）"
+          - trigger: "悬停样式卡片"
+            behavior: "显示样式名称tooltip"
+
+    provides_apis: []
+    consumes_apis:
+      - "PUT /api/v1/tasks/{id}/subtitle-settings"
+    dependencies:
+      - "4.4"
+    sm_hints:
+      front_end_spec: null
+      architecture: null

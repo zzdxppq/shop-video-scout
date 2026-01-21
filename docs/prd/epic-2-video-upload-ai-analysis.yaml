@@ -1,0 +1,314 @@
+epic_id: 2
+title: "视频上传与AI镜头分析"
+description: |
+  实现视频文件的批量上传功能，包括拖拽上传、进度显示、缩略图生成。
+  集成通义千问VL进行镜头内容分析，自动分类和质量评分，标记推荐镜头。
+
+stories:
+  - id: "2.1"
+    title: "视频上传服务实现"
+    repository_type: monolith
+    estimated_complexity: high
+    priority: P0
+
+    acceptance_criteria:
+      - id: AC1
+        title: "获取OSS预签名上传URL"
+        scenario:
+          given: "用户准备上传视频文件"
+          when: "请求上传URL"
+          then:
+            - "生成OSS预签名上传URL"
+            - "URL有效期15分钟"
+            - "返回上传URL和文件key"
+
+        business_rules:
+          - id: "BR-1.1"
+            rule: "文件存储路径格式：videos/{user_id}/{task_id}/{uuid}.{ext}"
+          - id: "BR-1.2"
+            rule: "仅支持mp4和mov格式"
+          - id: "BR-1.3"
+            rule: "单文件最大100MB"
+
+        data_validation:
+          - field: "filename"
+            type: "string"
+            required: true
+            rules: "有效文件名，扩展名为mp4或mov"
+            error_message: "仅支持MP4和MOV格式视频"
+          - field: "file_size"
+            type: "number"
+            required: true
+            rules: "小于100MB (104857600 bytes)"
+            error_message: "单个视频不能超过100MB"
+
+        error_handling:
+          - scenario: "文件格式不支持"
+            code: "400"
+            message: "仅支持MP4和MOV格式"
+            action: "返回支持的格式列表"
+          - scenario: "文件过大"
+            code: "400"
+            message: "单个视频不能超过100MB"
+            action: "返回文件大小限制"
+
+        examples:
+          - input: |
+              POST /api/v1/tasks/12345/videos/upload-url
+              {"filename": "video1.mp4", "file_size": 52428800}
+            expected: |
+              200 OK
+              {"upload_url": "https://oss...?signature=...", "oss_key": "videos/1/12345/abc123.mp4", "expires_in": 900}
+
+      - id: AC2
+        title: "确认上传完成并处理"
+        scenario:
+          given: "视频文件已上传到OSS"
+          when: "前端确认上传完成"
+          then:
+            - "创建视频记录"
+            - "使用FFmpeg提取关键帧"
+            - "生成视频缩略图"
+            - "获取视频元信息（时长、分辨率）"
+            - "返回视频信息"
+
+        business_rules:
+          - id: "BR-2.1"
+            rule: "每2秒提取1帧关键帧"
+          - id: "BR-2.2"
+            rule: "缩略图尺寸为320x180"
+          - id: "BR-2.3"
+            rule: "视频时长超过3分钟则拒绝"
+          - id: "BR-2.4"
+            rule: "每个任务最多20个视频"
+
+        error_handling:
+          - scenario: "视频时长超限"
+            code: "400"
+            message: "视频时长不能超过3分钟"
+            action: "删除已上传文件，返回错误"
+          - scenario: "视频数量超限"
+            code: "400"
+            message: "每个任务最多上传20个视频"
+            action: "返回当前视频数量"
+
+        examples:
+          - input: |
+              POST /api/v1/tasks/12345/videos
+              {"oss_key": "videos/1/12345/abc123.mp4", "original_filename": "店门口.mp4"}
+            expected: |
+              201 Created
+              {"id": 1, "thumbnail_url": "https://...", "duration_seconds": 45, "status": "pending"}
+
+    provides_apis:
+      - "POST /api/v1/tasks/{id}/videos/upload-url"
+      - "POST /api/v1/tasks/{id}/videos"
+      - "GET /api/v1/tasks/{id}/videos"
+      - "DELETE /api/v1/tasks/{id}/videos/{video_id}"
+    consumes_apis: []
+    dependencies:
+      - "1.4"
+    sm_hints:
+      front_end_spec: null
+      architecture: null
+
+  - id: "2.2"
+    title: "前端视频上传组件"
+    repository_type: monolith
+    estimated_complexity: medium
+    priority: P0
+
+    acceptance_criteria:
+      - id: AC1
+        title: "拖拽上传区域"
+        scenario:
+          given: "用户在创建任务页面"
+          when: "用户拖拽视频文件到上传区域"
+          then:
+            - "显示拖拽高亮效果"
+            - "释放后开始上传"
+            - "显示上传进度"
+            - "上传完成后显示缩略图"
+
+        business_rules:
+          - id: "BR-1.1"
+            rule: "支持同时拖拽多个文件"
+          - id: "BR-1.2"
+            rule: "自动过滤非视频文件"
+          - id: "BR-1.3"
+            rule: "显示已上传数量/最大数量"
+
+        error_handling:
+          - scenario: "文件格式不支持"
+            code: "FORMAT_ERROR"
+            message: "xxx.jpg 不是支持的视频格式"
+            action: "Toast提示，跳过该文件继续其他"
+          - scenario: "上传失败"
+            code: "UPLOAD_ERROR"
+            message: "上传失败，请重试"
+            action: "显示重试按钮"
+
+        interaction:
+          - trigger: "拖拽进入"
+            behavior: "上传区域边框变为蓝色虚线"
+          - trigger: "开始上传"
+            behavior: "显示进度条和百分比"
+          - trigger: "上传完成"
+            behavior: "显示缩略图和对勾图标"
+          - trigger: "悬停已上传视频"
+            behavior: "显示删除按钮"
+
+      - id: AC2
+        title: "上传限制提示"
+        scenario:
+          given: "已上传视频数量达到限制"
+          when: "用户尝试继续上传"
+          then:
+            - "显示数量限制提示"
+            - "禁用上传功能"
+
+        business_rules:
+          - id: "BR-2.1"
+            rule: "最少上传10个视频"
+          - id: "BR-2.2"
+            rule: "最多上传20个视频"
+
+        error_handling:
+          - scenario: "数量不足"
+            code: "MIN_COUNT"
+            message: "请至少上传10个视频"
+            action: "禁用开始分析按钮"
+
+    provides_apis: []
+    consumes_apis:
+      - "POST /api/v1/tasks/{id}/videos/upload-url"
+      - "POST /api/v1/tasks/{id}/videos"
+    dependencies:
+      - "2.1"
+    sm_hints:
+      front_end_spec: null
+      architecture: null
+
+  - id: "2.3"
+    title: "AI镜头分析服务"
+    repository_type: monolith
+    estimated_complexity: high
+    priority: P0
+
+    acceptance_criteria:
+      - id: AC1
+        title: "调用通义千问VL分析镜头"
+        scenario:
+          given: "视频关键帧已提取"
+          when: "开始AI分析"
+          then:
+            - "将关键帧发送到通义千问VL"
+            - "获取内容分类结果"
+            - "获取具体标签和描述"
+            - "获取质量评分"
+            - "存储分析结果"
+
+        business_rules:
+          - id: "BR-1.1"
+            rule: "每个视频分析3-5个关键帧"
+          - id: "BR-1.2"
+            rule: "分类：food/person/environment/other"
+          - id: "BR-1.3"
+            rule: "标签最多5个"
+          - id: "BR-1.4"
+            rule: "质量评分综合清晰度、构图、光线、稳定性"
+
+        error_handling:
+          - scenario: "AI服务超时"
+            code: "504"
+            message: "分析超时，正在重试"
+            action: "自动重试3次，间隔递增"
+          - scenario: "AI服务不可用"
+            code: "503"
+            message: "AI服务暂时不可用"
+            action: "记录日志，延迟重试"
+
+        examples:
+          - input: "视频关键帧图片"
+            expected: |
+              {"category": "food", "tags": ["火锅", "毛肚", "特写"], "description": "一盘新鲜毛肚的特写镜头", "quality_score": 95}
+
+      - id: AC2
+        title: "标记推荐镜头"
+        scenario:
+          given: "所有视频分析完成"
+          when: "系统执行推荐标记"
+          then:
+            - "按分类归组所有视频"
+            - "每类按质量评分排序"
+            - "标记每类Top2为推荐镜头"
+            - "更新视频记录"
+
+        business_rules:
+          - id: "BR-2.1"
+            rule: "每个分类最多标记2个推荐"
+          - id: "BR-2.2"
+            rule: "推荐优先选择质量评分>70的镜头"
+          - id: "BR-2.3"
+            rule: "如果某分类视频少于2个，全部标记为推荐"
+
+        error_handling:
+          - scenario: "某分类无视频"
+            code: "INFO"
+            message: "无"
+            action: "跳过该分类，记录日志"
+
+    provides_apis:
+      - "POST /api/v1/tasks/{id}/analyze"
+      - "GET /api/v1/tasks/{id}/progress"
+    consumes_apis: []
+    dependencies:
+      - "2.1"
+    sm_hints:
+      front_end_spec: null
+      architecture: null
+
+  - id: "2.4"
+    title: "分析进度展示页面"
+    repository_type: monolith
+    estimated_complexity: low
+    priority: P0
+
+    acceptance_criteria:
+      - id: AC1
+        title: "分析进度展示"
+        scenario:
+          given: "用户点击开始AI分析"
+          when: "AI分析进行中"
+          then:
+            - "显示整体进度条"
+            - "显示当前处理阶段"
+            - "显示预计剩余时间"
+            - "分析完成后自动进入下一步"
+
+        business_rules:
+          - id: "BR-1.1"
+            rule: "每2秒轮询一次进度"
+          - id: "BR-1.2"
+            rule: "显示阶段：上传完成 → 分析中 → 分析完成"
+
+        error_handling:
+          - scenario: "分析失败"
+            code: "ANALYSIS_ERROR"
+            message: "分析失败，请重试"
+            action: "显示重试按钮"
+
+        interaction:
+          - trigger: "分析中"
+            behavior: "进度条动画，禁止页面离开"
+          - trigger: "分析完成"
+            behavior: "显示完成动画，2秒后跳转"
+
+    provides_apis: []
+    consumes_apis:
+      - "GET /api/v1/tasks/{id}/progress"
+    dependencies:
+      - "2.3"
+    sm_hints:
+      front_end_spec: null
+      architecture: null

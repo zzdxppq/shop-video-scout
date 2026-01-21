@@ -3,8 +3,9 @@ metadata:
   proposal_id: PCP-2026-001
   proposal_type: product
   title: "V1.0实现完整端到端流程"
-  status: draft
+  status: applied
   created_at: 2026-01-14
+  applied_at: 2026-01-14
   author: PM
 
 linkage:
@@ -400,4 +401,5 @@ tech_proposal_path: docs/proposals/tech/TCP-2026-001-microservices-architecture.
 
 | Date | Approver | Decision | Notes |
 |------|----------|----------|-------|
-| 2026-01-14 | - | pending | 等待用户确认 |
+| 2026-01-14 | User | approved | 用户确认产品方案 |
+| 2026-01-14 | SM | applied | Stories created: E5.1-E5.3, E6.1-E6.2, E7.1-E7.2, E8.1-E8.2 |

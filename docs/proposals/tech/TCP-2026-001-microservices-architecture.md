@@ -3,8 +3,9 @@ metadata:
   proposal_id: TCP-2026-001
   proposal_type: technical
   title: "微服务架构设计 - Vue3 + Java21 + Spring Cloud"
-  status: draft
+  status: applied
   created_at: 2026-01-14
+  applied_at: 2026-01-14
   author: Architect
 
 linkage:
@@ -1017,4 +1018,5 @@ Phase 5: 前端集成
 
 | Date | Approver | Decision | Notes |
 |------|----------|----------|-------|
-| 2026-01-14 | - | pending | 等待确认 |
+| 2026-01-14 | User | approved | 用户确认技术方案 |
+| 2026-01-14 | SM | applied | Stories created: E1.1-E1.3, E3.1, E4.1, E5.1-E5.2, E6.1, E7.3, E8.1 |
