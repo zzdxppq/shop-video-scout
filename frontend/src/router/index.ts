@@ -20,7 +20,7 @@ const router = createRouter({
     {
       path: '/task/:id/upload',
       name: 'task-upload',
-      component: () => import('../views/CreateTaskView.vue'), // Placeholder - will be implemented in Story 1.5
+      component: () => import('../views/TaskUploadView.vue'),
       meta: { requiresAuth: true }
     }
   ]
