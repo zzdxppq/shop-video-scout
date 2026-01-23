@@ -1,8 +1,11 @@
 package com.shopvideoscout.ai;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * AI Service Application.
@@ -15,6 +18,9 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
         "com.shopvideoscout.mybatis"
 })
 @EnableDiscoveryClient
+@EnableAsync
+@EnableConfigurationProperties
+@MapperScan("com.shopvideoscout.ai.mapper")
 public class AiServiceApplication {
 
     public static void main(String[] args) {
