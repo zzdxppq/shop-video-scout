@@ -39,6 +39,12 @@ const router = createRouter({
       name: 'task-analysis',
       component: () => import('../views/TaskAnalysisView.vue'),
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/task/:id/script',
+      name: 'task-script',
+      component: () => import('../views/ScriptEditorView.vue'),
+      meta: { requiresAuth: true }
     }
   ]
 });
