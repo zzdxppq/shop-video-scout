@@ -99,4 +99,16 @@ public interface VideoFrameMapper extends BaseMapper<VideoFrame> {
         WHERE v.task_id = #{taskId}
         """)
     int resetRecommendationsByTaskId(@Param("taskId") Long taskId);
+
+    /**
+     * Find analyzed frames for a task (frames with category set).
+     * Used for script generation to get shot summaries.
+     */
+    @Select("""
+        SELECT vf.* FROM video_frames vf
+        INNER JOIN videos v ON vf.video_id = v.id
+        WHERE v.task_id = #{taskId} AND vf.category IS NOT NULL
+        ORDER BY vf.quality_score DESC, vf.id
+        """)
+    List<VideoFrame> findAnalyzedByTaskId(@Param("taskId") Long taskId);
 }

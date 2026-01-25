@@ -41,6 +41,18 @@ qwen:
     max-retry-attempts: 3
     retry-delay-ms: 1000
 
+# Doubao (豆包) Configuration for Script Generation
+doubao:
+  base-url: https://ark.cn-beijing.volces.com/api/v3/chat/completions
+  api-key: ${DOUBAO_API_KEY:}
+  endpoint-id: ${DOUBAO_ENDPOINT_ID:}
+  timeout-seconds: 60
+  max-retry-attempts: 2
+  retry-delay-ms: 5000
+  default-temperature: 0.7
+  max-temperature: 0.9
+  temperature-increment: 0.1
+
 # Logging
 logging:
   level:
