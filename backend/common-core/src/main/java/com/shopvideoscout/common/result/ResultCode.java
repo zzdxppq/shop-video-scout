@@ -58,7 +58,15 @@ public enum ResultCode {
     INVALID_TOKEN(2006, "无效的令牌"),
     TOKEN_EXPIRED(2007, "令牌已过期"),
     REFRESH_TOKEN_INVALID(2008, "刷新令牌无效"),
-    INVALID_CODE_FORMAT(2009, "请输入6位验证码");
+    INVALID_CODE_FORMAT(2009, "请输入6位验证码"),
+
+    // Voice Clone Errors (1017-1022)
+    VOICE_SAMPLE_NOT_FOUND(1017, "声音样本未找到"),
+    VOICE_SAMPLE_LIMIT_EXCEEDED(1018, "声音样本数量已达上限（最多3个）"),
+    VOICE_CLONE_FAILED(1019, "声音克隆失败，请确保样本清晰无杂音"),
+    VOICE_CLONE_IN_PROGRESS(1020, "您的声音样本正在处理中，请稍后"),
+    INVALID_AUDIO_FORMAT(1021, "不支持的音频格式，请上传MP3、WAV或M4A文件"),
+    AUDIO_DURATION_INVALID(1022, "声音样本时长需要在5秒到2分钟之间");
 
     private final int code;
     private final String message;

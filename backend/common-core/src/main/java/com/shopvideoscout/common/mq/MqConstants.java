@@ -13,4 +13,12 @@ public final class MqConstants {
     public static final String COMPOSE_DLQ = "compose.dlq";
     public static final String COMPOSE_DLX = "compose.dlx";
     public static final String COMPOSE_DL_ROUTING_KEY = "task.compose.dead";
+
+    // Voice Clone Queue
+    public static final String VOICE_CLONE_EXCHANGE = "voice.clone.exchange";
+    public static final String VOICE_CLONE_QUEUE = "voice.clone.queue";
+    public static final String VOICE_CLONE_ROUTING_KEY = "voice.clone";
+    public static final String VOICE_CLONE_DLQ = "voice.clone.dlq";
+    public static final String VOICE_CLONE_DLX = "voice.clone.dlx";
+    public static final String VOICE_CLONE_DL_ROUTING_KEY = "voice.clone.dead";
 }

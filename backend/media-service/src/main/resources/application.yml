@@ -121,6 +121,10 @@ compose:
   callback-url: ${COMPOSE_CALLBACK_URL:http://task-service/internal/tasks/{taskId}/compose-complete}
   progress-ttl-seconds: 3600
 
+# Voice Clone Configuration (Story 4.2)
+voice-clone:
+  callback-url: ${VOICE_CLONE_CALLBACK_URL:http://user-service/internal/voice/samples/{sampleId}/clone-result}
+
 # Logging
 logging:
   level:

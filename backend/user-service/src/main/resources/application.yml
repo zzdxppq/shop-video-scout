@@ -28,6 +28,14 @@ spring:
       max-lifetime: 1800000
       pool-name: UserServiceHikariPool
 
+  # RabbitMQ Configuration (Story 4.2: Voice Clone)
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    virtual-host: /
+
   # Redis Configuration (BR-2.2: JSON serialization)
   data:
     redis:
@@ -62,6 +70,14 @@ jwt:
   secret: ${JWT_SECRET:shop-video-scout-jwt-secret-key-must-be-at-least-256-bits-long}
   expiration: 900
   refresh-expiration: 604800
+
+# Aliyun OSS Configuration (Story 4.2: Voice Sample Upload)
+aliyun:
+  oss:
+    endpoint: ${OSS_ENDPOINT:oss-cn-hangzhou.aliyuncs.com}
+    access-key-id: ${OSS_ACCESS_KEY_ID:}
+    access-key-secret: ${OSS_ACCESS_KEY_SECRET:}
+    bucket-name: ${OSS_BUCKET_NAME:shop-video-scout}
 
 # Actuator
 management:

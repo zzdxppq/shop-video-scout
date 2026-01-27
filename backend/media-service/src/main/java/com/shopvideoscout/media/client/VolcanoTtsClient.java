@@ -213,6 +213,60 @@ public class VolcanoTtsClient {
         return maxLength;
     }
 
+    /**
+     * Clone a voice using Volcano Seed-ICL API.
+     * Sends the audio sample and receives a clone_voice_id.
+     *
+     * @param ossKey the OSS key of the audio sample
+     * @return clone_voice_id from Seed-ICL
+     */
+    @SuppressWarnings("unchecked")
+    public String cloneVoice(String ossKey) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer;" + ttsProperties.getAccessToken());
+
+        Map<String, Object> requestBody = Map.of(
+                "app", Map.of("appid", ttsProperties.getAppId()),
+                "user", Map.of("uid", "shop-video-scout"),
+                "audio", Map.of(
+                        "audio_url", ossKey,
+                        "format", "mp3",
+                        "sample_rate", ttsProperties.getSampleRate()
+                ),
+                "request", Map.of("operation", "clone")
+        );
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+
+        try {
+            ResponseEntity<Map> response = restTemplate.exchange(
+                    ttsProperties.getApiUrl(),
+                    HttpMethod.POST,
+                    entity,
+                    Map.class
+            );
+
+            if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
+                throw new BusinessException(ResultCode.VOICE_CLONE_FAILED,
+                        "声音克隆API返回异常: " + response.getStatusCode());
+            }
+
+            Map<String, Object> body = response.getBody();
+            String cloneVoiceId = (String) body.get("voice_id");
+            if (cloneVoiceId == null || cloneVoiceId.isBlank()) {
+                throw new BusinessException(ResultCode.VOICE_CLONE_FAILED, "声音克隆未返回音色ID");
+            }
+            return cloneVoiceId;
+        } catch (BusinessException e) {
+            throw e;
+        } catch (ResourceAccessException e) {
+            throw new BusinessException(ResultCode.VOICE_CLONE_FAILED, "声音克隆API超时: " + e.getMessage());
+        } catch (Exception e) {
+            throw new BusinessException(ResultCode.VOICE_CLONE_FAILED, "声音克隆API调用失败: " + e.getMessage());
+        }
+    }
+
     private void sleep(long ms) {
         try {
             Thread.sleep(ms);

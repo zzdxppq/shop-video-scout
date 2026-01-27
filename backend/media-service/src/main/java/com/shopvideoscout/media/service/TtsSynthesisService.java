@@ -6,6 +6,7 @@ import com.shopvideoscout.common.mq.ComposeMessage;
 import com.shopvideoscout.common.result.ResultCode;
 import com.shopvideoscout.media.client.VolcanoTtsClient;
 import com.shopvideoscout.media.config.OssConfig;
+import com.shopvideoscout.media.mapper.VoiceSampleReadMapper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,6 +33,7 @@ public class TtsSynthesisService {
     private final OSS ossClient;
     private final OssConfig ossConfig;
     private final ComposeProgressTracker progressTracker;
+    private final VoiceSampleReadMapper voiceSampleReadMapper;
 
     /**
      * Synthesize all paragraphs for a compose message.
@@ -42,7 +44,7 @@ public class TtsSynthesisService {
     public SynthesisResult synthesize(ComposeMessage message) {
         List<ComposeMessage.Paragraph> paragraphs = message.getParagraphs();
         Long taskId = message.getTaskId();
-        String voiceId = message.getVoiceConfig().getVoiceId();
+        String voiceId = resolveVoiceId(message.getVoiceConfig());
 
         log.info("Starting TTS synthesis for task {}: {} paragraphs", taskId, paragraphs.size());
         progressTracker.initProgress(taskId, paragraphs.size());
@@ -155,6 +157,39 @@ public class TtsSynthesisService {
         }
 
         return merged;
+    }
+
+    /**
+     * Resolve the voice ID to use for TTS.
+     * For "clone" type, resolves clone_voice_id from voice_samples table via DB lookup.
+     * For "standard" type, returns the preset voiceId directly.
+     */
+    String resolveVoiceId(ComposeMessage.VoiceConfig voiceConfig) {
+        if ("clone".equals(voiceConfig.getType()) && voiceConfig.getVoiceSampleId() != null) {
+            Long sampleId = voiceConfig.getVoiceSampleId();
+            String status = voiceSampleReadMapper.getStatus(sampleId);
+            if (status == null) {
+                throw new BusinessException(ResultCode.VOICE_SAMPLE_NOT_FOUND);
+            }
+            // SEC-002: Verify requesting user owns the voice sample
+            if (voiceConfig.getUserId() != null) {
+                Long sampleUserId = voiceSampleReadMapper.getUserId(sampleId);
+                if (!voiceConfig.getUserId().equals(sampleUserId)) {
+                    throw new BusinessException(ResultCode.VOICE_SAMPLE_NOT_FOUND);
+                }
+            }
+            if (!"completed".equals(status)) {
+                throw new BusinessException(ResultCode.VOICE_CLONE_IN_PROGRESS);
+            }
+            String cloneVoiceId = voiceSampleReadMapper.getCloneVoiceId(sampleId);
+            if (cloneVoiceId == null || cloneVoiceId.isBlank()) {
+                throw new BusinessException(ResultCode.VOICE_CLONE_FAILED,
+                        "克隆音色ID未找到，请重新上传样本");
+            }
+            log.info("Resolved clone voice ID {} for sample {}", cloneVoiceId, sampleId);
+            return cloneVoiceId;
+        }
+        return voiceConfig.getVoiceId();
     }
 
     /**

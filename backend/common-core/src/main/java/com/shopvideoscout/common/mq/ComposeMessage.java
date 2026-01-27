@@ -42,5 +42,14 @@ public class ComposeMessage implements Serializable {
     public static class VoiceConfig implements Serializable {
         private String type;
         private String voiceId;
+        /**
+         * Voice sample ID for clone voice (Story 4.2).
+         * When set, TtsSynthesisService resolves clone_voice_id via DB lookup.
+         */
+        private Long voiceSampleId;
+        /**
+         * User ID for ownership verification when using clone voice (SEC-002).
+         */
+        private Long userId;
     }
 }

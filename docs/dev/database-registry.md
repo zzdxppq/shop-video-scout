@@ -5,8 +5,8 @@
 
 ## Registry Metadata
 
-**Last Updated**: 2026-01-22
-**Total Stories Tracked**: 1
+**Last Updated**: 2026-01-28
+**Total Stories Tracked**: 3
 **Repository**: shop-video-scout
 **Mode**: monolith
 
@@ -33,6 +33,8 @@
 | promotion_text | TEXT | - | 1.1 |
 | video_style | ENUM('recommend','review','vlog') | NOT NULL | 1.1 |
 | status | ENUM('created','uploading','analyzing','script_ready','script_edited','voice_set','composing','completed','failed') | DEFAULT 'created' | 1.1 |
+| voice_type | VARCHAR(50) | DEFAULT 'xiaomei' | 4.1 |
+| voice_sample_id | BIGINT | NULL | 4.1 |
 | created_at | DATETIME | DEFAULT CURRENT_TIMESTAMP | 1.1 |
 | updated_at | DATETIME | DEFAULT CURRENT_TIMESTAMP ON UPDATE | 1.1 |
 
@@ -77,6 +79,20 @@
 | created_at | DATETIME | DEFAULT CURRENT_TIMESTAMP | 1.1 |
 | updated_at | DATETIME | DEFAULT CURRENT_TIMESTAMP ON UPDATE | 1.1 |
 
+### voice_samples
+| Field | Type | Constraints | Added in Story |
+|-------|------|-------------|----------------|
+| id | BIGINT | PRIMARY KEY AUTO_INCREMENT | 4.2 |
+| user_id | BIGINT | NOT NULL, FK(users.id) ON DELETE CASCADE | 4.2 |
+| name | VARCHAR(100) | - | 4.2 |
+| oss_key | VARCHAR(500) | NOT NULL | 4.2 |
+| duration_seconds | INT | NOT NULL | 4.2 |
+| clone_voice_id | VARCHAR(100) | NULL | 4.2 |
+| status | ENUM('uploading','processing','completed','failed') | DEFAULT 'uploading' | 4.2 |
+| error_message | VARCHAR(500) | NULL | 4.2 |
+| created_at | DATETIME | DEFAULT CURRENT_TIMESTAMP | 4.2 |
+| updated_at | DATETIME | DEFAULT CURRENT_TIMESTAMP ON UPDATE | 4.2 |
+
 ## Naming Conventions & Patterns
 
 | Pattern | Convention |
@@ -92,6 +108,8 @@
 | Story | Changes | Tables Affected |
 |-------|---------|-----------------|
 | 1.1 | Initial schema creation | users, tasks, videos, video_frames, scripts |
+| 4.1 | ALTER tasks: ADD voice_type, voice_sample_id; ADD INDEX idx_tasks_voice_type | tasks |
+| 4.2 | CREATE voice_samples; ALTER tasks: ADD FK voice_sample_id → voice_samples.id ON DELETE SET NULL | voice_samples, tasks |
 
-**Total Tables**: 5
-**Total Fields**: 47
+**Total Tables**: 6
+**Total Fields**: 59

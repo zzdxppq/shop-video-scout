@@ -73,17 +73,30 @@ public class ComposeService {
             throw new BusinessException(ResultCode.BAD_REQUEST, "脚本无段落内容");
         }
 
-        // Build compose message
+        // Build compose message with voice config
         String voiceType = task.getVoiceType() != null
                 ? task.getVoiceType() : VoiceConstants.DEFAULT_VOICE_TYPE;
+
+        ComposeMessage.VoiceConfig voiceConfig;
+        if (task.getVoiceSampleId() != null) {
+            // Clone voice: TtsSynthesisService will resolve clone_voice_id via DB lookup
+            // SEC-002: Pass userId for ownership verification in media-service
+            voiceConfig = ComposeMessage.VoiceConfig.builder()
+                    .type("clone")
+                    .voiceSampleId(task.getVoiceSampleId())
+                    .userId(userId)
+                    .build();
+        } else {
+            voiceConfig = ComposeMessage.VoiceConfig.builder()
+                    .type("standard")
+                    .voiceId(voiceType)
+                    .build();
+        }
 
         ComposeMessage message = ComposeMessage.builder()
                 .taskId(taskId)
                 .paragraphs(paragraphs)
-                .voiceConfig(ComposeMessage.VoiceConfig.builder()
-                        .type("standard")
-                        .voiceId(voiceType)
-                        .build())
+                .voiceConfig(voiceConfig)
                 .callbackUrl("http://task-service/internal/tasks/" + taskId + "/compose-complete")
                 .build();
 
