@@ -28,6 +28,22 @@ spring:
       max-lifetime: 1800000
       pool-name: MediaServiceHikariPool
 
+  # RabbitMQ Configuration
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    virtual-host: /
+    listener:
+      simple:
+        acknowledge-mode: auto
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 60000
+          multiplier: 2.0
+
   # Redis Configuration (BR-2.2: JSON serialization)
   data:
     redis:
@@ -88,6 +104,22 @@ management:
   endpoint:
     health:
       show-details: always
+
+# Volcano TTS Configuration (火山引擎 Seed-TTS)
+volcano:
+  tts:
+    api-url: ${VOLCANO_TTS_API_URL:https://openspeech.bytedance.com/api/v1/tts}
+    app-id: ${VOLCANO_TTS_APP_ID:}
+    access-token: ${VOLCANO_TTS_ACCESS_TOKEN:}
+    sample-rate: 48000
+    format: mp3
+    timeout-ms: 30000
+    max-text-length: 5000
+
+# Compose Configuration
+compose:
+  callback-url: ${COMPOSE_CALLBACK_URL:http://task-service/internal/tasks/{taskId}/compose-complete}
+  progress-ttl-seconds: 3600
 
 # Logging
 logging:

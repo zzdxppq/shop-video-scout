@@ -28,6 +28,22 @@ spring:
       max-lifetime: 1800000
       pool-name: TaskServiceHikariPool
 
+  # RabbitMQ Configuration
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    virtual-host: /
+    listener:
+      simple:
+        acknowledge-mode: auto
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 60000
+          multiplier: 2.0
+
   # Redis Configuration (BR-2.2: JSON serialization)
   data:
     redis:

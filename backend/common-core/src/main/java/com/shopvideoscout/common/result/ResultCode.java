@@ -41,6 +41,13 @@ public enum ResultCode {
     VIDEO_COUNT_EXCEEDED(1007, "Video count exceeded"),
     AI_SERVICE_ERROR(1008, "AI service error"),
     AI_SERVICE_TIMEOUT(1009, "AI service timeout"),
+    TTS_SERVICE_ERROR(1010, "TTS配音服务异常"),
+    TTS_SERVICE_TIMEOUT(1011, "配音生成超时"),
+    INVALID_VOICE_TYPE(1012, "不支持的音色类型"),
+    COMPOSE_TEXT_TOO_LONG(1013, "单次配音文本不能超过5000字"),
+    TASK_STATUS_INVALID(1014, "任务状态不允许此操作"),
+    TASK_ALREADY_COMPOSING(1015, "任务正在合成中，请勿重复提交"),
+    SCRIPT_NOT_FOUND(1016, "脚本未找到"),
 
     // Auth Errors (2xxx)
     INVALID_PHONE_FORMAT(2001, "请输入正确的手机号"),
