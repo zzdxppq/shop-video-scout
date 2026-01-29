@@ -93,10 +93,16 @@ public class ComposeService {
                     .build();
         }
 
+        // Build compose message with subtitle settings (Story 4.3)
+        Boolean subtitleEnabled = task.getSubtitleEnabled() != null ? task.getSubtitleEnabled() : true;
+        String subtitleStyle = task.getSubtitleStyle() != null ? task.getSubtitleStyle() : "simple_white";
+
         ComposeMessage message = ComposeMessage.builder()
                 .taskId(taskId)
                 .paragraphs(paragraphs)
                 .voiceConfig(voiceConfig)
+                .subtitleEnabled(subtitleEnabled)
+                .subtitleStyle(subtitleStyle)
                 .callbackUrl("http://task-service/internal/tasks/" + taskId + "/compose-complete")
                 .build();
 
@@ -174,9 +180,14 @@ public class ComposeService {
                 JsonNode pNode = paragraphsNode.get(i);
                 String text = pNode.has("text") ? pNode.get("text").asText() : "";
                 if (!text.isBlank()) {
+                    // Extract shot_id for video cutting (Story 4.3)
+                    Long shotId = pNode.has("shot_id") && !pNode.get("shot_id").isNull()
+                            ? pNode.get("shot_id").asLong()
+                            : null;
                     paragraphs.add(ComposeMessage.Paragraph.builder()
                             .index(i)
                             .text(text)
+                            .shotId(shotId)
                             .build());
                 }
             }

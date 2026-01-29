@@ -66,7 +66,12 @@ public enum ResultCode {
     VOICE_CLONE_FAILED(1019, "声音克隆失败，请确保样本清晰无杂音"),
     VOICE_CLONE_IN_PROGRESS(1020, "您的声音样本正在处理中，请稍后"),
     INVALID_AUDIO_FORMAT(1021, "不支持的音频格式，请上传MP3、WAV或M4A文件"),
-    AUDIO_DURATION_INVALID(1022, "声音样本时长需要在5秒到2分钟之间");
+    AUDIO_DURATION_INVALID(1022, "声音样本时长需要在5秒到2分钟之间"),
+
+    // Video Composition Errors (1023-1025, Story 4.3)
+    COMPOSITION_FAILED(1023, "视频合成失败"),
+    VIDEO_CUTTING_FAILED(1024, "视频片段裁剪失败"),
+    OUTPUT_NOT_READY(1025, "视频输出尚未就绪");
 
     private final int code;
     private final String message;

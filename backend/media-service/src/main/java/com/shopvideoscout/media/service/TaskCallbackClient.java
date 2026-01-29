@@ -28,7 +28,7 @@ public class TaskCallbackClient {
     private static final long CALLBACK_BACKOFF_MS = 2000;
 
     /**
-     * Notify task-service that compose completed successfully.
+     * Notify task-service that compose completed successfully (legacy - TTS only).
      */
     public void notifyComposeComplete(Long taskId, TtsSynthesisService.SynthesisResult result) {
         String url = resolveCallbackUrl(taskId);
@@ -44,6 +44,22 @@ public class TaskCallbackClient {
                         "durationSeconds", p.getDurationSeconds()
                 ))
                 .collect(Collectors.toList()));
+
+        callWithRetry(url, body);
+    }
+
+    /**
+     * Notify task-service that composition completed with output video info (Story 4.3).
+     */
+    public void notifyComposeCompleteWithOutput(Long taskId, String outputOssKey,
+                                                  int durationSeconds, long fileSizeBytes) {
+        String url = resolveCallbackUrl(taskId);
+        Map<String, Object> body = new HashMap<>();
+        body.put("taskId", taskId);
+        body.put("status", "completed");
+        body.put("outputOssKey", outputOssKey);
+        body.put("outputDurationSeconds", durationSeconds);
+        body.put("outputFileSize", fileSizeBytes);
 
         callWithRetry(url, body);
     }

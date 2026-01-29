@@ -14,6 +14,13 @@ import java.util.concurrent.TimeUnit;
  * Tracks compose progress in Redis.
  * Written by media-service, read by task-service.
  * Redis key: task:progress:{taskId} (Hash, TTL 1h)
+ *
+ * Phases (Story 4.3):
+ * - tts_synthesis: TTS voice synthesis
+ * - subtitle_generation: ASS subtitle generation
+ * - video_cutting: Video segment cutting
+ * - video_composition: Video + audio + subtitle composition
+ * - output_upload: Upload final video to OSS
  */
 @Slf4j
 @Component
@@ -24,6 +31,13 @@ public class ComposeProgressTracker {
     private final ComposeProperties composeProperties;
 
     private static final String PROGRESS_KEY_PREFIX = "task:progress:";
+
+    // Phase constants (Story 4.3)
+    public static final String PHASE_TTS_SYNTHESIS = "tts_synthesis";
+    public static final String PHASE_SUBTITLE_GENERATION = "subtitle_generation";
+    public static final String PHASE_VIDEO_CUTTING = "video_cutting";
+    public static final String PHASE_VIDEO_COMPOSITION = "video_composition";
+    public static final String PHASE_OUTPUT_UPLOAD = "output_upload";
 
     /**
      * Initialize progress tracking for a compose task.
@@ -56,6 +70,16 @@ public class ComposeProgressTracker {
         redisUtils.hSet(key, "estimated_remaining_seconds", String.valueOf(estimatedSeconds));
         log.debug("Progress for task {}: {}/{}, estimated remaining: {}s",
                 taskId, completedCount, totalCount, estimatedSeconds);
+    }
+
+    /**
+     * Update current phase (Story 4.3).
+     */
+    public void updatePhase(Long taskId, String phase, String stepDescription) {
+        String key = progressKey(taskId);
+        redisUtils.hSet(key, "status", phase);
+        redisUtils.hSet(key, "current_step", stepDescription);
+        log.debug("Phase update for task {}: {} - {}", taskId, phase, stepDescription);
     }
 
     /**

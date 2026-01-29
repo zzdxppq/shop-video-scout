@@ -43,12 +43,29 @@ public class ComposeCallbackController {
 
         if ("completed".equals(status)) {
             task.setStatus(TaskConstants.TaskStatus.COMPLETED);
+
+            // Handle legacy TTS-only callback
             if (body.get("totalDurationSeconds") != null) {
                 task.setOutputDurationSeconds(
                         ((Number) body.get("totalDurationSeconds")).intValue());
             }
+
+            // Handle full composition callback (Story 4.3)
+            if (body.get("outputOssKey") != null) {
+                task.setOutputOssKey((String) body.get("outputOssKey"));
+            }
+            if (body.get("outputDurationSeconds") != null) {
+                task.setOutputDurationSeconds(
+                        ((Number) body.get("outputDurationSeconds")).intValue());
+            }
+            if (body.get("outputFileSize") != null) {
+                task.setOutputFileSize(
+                        ((Number) body.get("outputFileSize")).longValue());
+            }
+
             taskMapper.updateById(task);
-            log.info("Task {} compose completed, status → completed", taskId);
+            log.info("Task {} compose completed, status → completed, output: {}",
+                    taskId, task.getOutputOssKey());
         } else if ("failed".equals(status)) {
             task.setStatus(TaskConstants.TaskStatus.FAILED);
             task.setErrorMessage((String) body.get("errorMessage"));

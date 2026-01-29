@@ -24,6 +24,17 @@ public class ComposeMessage implements Serializable {
 
     private VoiceConfig voiceConfig;
 
+    /**
+     * Whether subtitles are enabled (Story 4.3).
+     */
+    private Boolean subtitleEnabled;
+
+    /**
+     * Subtitle style template (Story 4.3).
+     * Values: simple_white, vibrant_yellow, xiaohongshu, douyin_hot, neon
+     */
+    private String subtitleStyle;
+
     private String callbackUrl;
 
     @Data
@@ -33,6 +44,10 @@ public class ComposeMessage implements Serializable {
     public static class Paragraph implements Serializable {
         private int index;
         private String text;
+        /**
+         * Shot ID mapping to videos.id for video segment cutting (Story 4.3).
+         */
+        private Long shotId;
     }
 
     @Data
