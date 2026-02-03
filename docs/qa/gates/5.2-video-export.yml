@@ -1,0 +1,154 @@
+# QA Gate File
+# Story 5.2: 下载导出功能
+# Generated: 2026-02-03
+
+story_id: "5.2"
+story_title: "下载导出功能"
+review_date: "2026-02-03"
+reviewer: "JW (QA Agent)"
+
+# Gate Result
+gate_result: BLOCKED
+next_status: Review  # Stays in Review until backend is implemented
+reasoning: >
+  Frontend implementation complete (47 tests, 100% pass rate), but backend implementation
+  is MISSING. Story requires both frontend and backend. Without backend endpoints
+  (DownloadController, AssetPackService), the ACs cannot be fulfilled. Frontend code
+  calls non-existent APIs. Blocking until backend is implemented.
+
+# Review Configuration
+review_round: 1
+review_mode: automated_plus_spot_check
+risk_level: LOW
+
+# Test Results
+test_results:
+  automated_tests:
+    executed: true
+    verification_method: direct_execution
+    evidence_source: "npm run test -- --run"
+    total: 557
+    passed: 557
+    failed: 0
+    pass_rate: 100%
+    new_tests: 47
+    typescript_check: PASS
+
+  e2e_tests:
+    executed: false
+    verified_by: code_review
+    note: "Cannot execute - backend endpoints do not exist"
+
+  project_type:
+    type: fullstack
+    subtype: vue3_springboot
+
+# AC Coverage Verification
+ac_coverage:
+  verification_method: traceability_verification
+  coverage_rate: 50%
+  passed: false
+  total_acs: 2
+  fully_verified: 0
+  partially_verified: 2
+  not_verified: 0
+
+  details:
+    - ac_id: AC1
+      title: 下载成品视频
+      status: PARTIAL
+      aspects_verified:
+        main_scenario: false
+        business_rules: 2/6
+        error_handling: true
+        ui_interaction: true
+      frontend_implemented:
+        - frontend/src/composables/useDownload.ts (downloadVideo)
+        - frontend/src/components/preview/DownloadButtons.vue
+        - frontend/src/api/download.ts (getVideoDownloadUrl)
+      backend_missing:
+        - backend/task-service/.../controller/DownloadController.java
+        - backend/task-service/.../service/DownloadService.java
+        - backend/task-service/.../util/FilenameUtils.java
+      test_locations:
+        - frontend/src/composables/__tests__/useDownload.spec.ts
+        - frontend/src/components/preview/__tests__/DownloadButtons.spec.ts
+
+    - ac_id: AC2
+      title: 下载素材包
+      status: PARTIAL
+      aspects_verified:
+        main_scenario: false
+        business_rules: 2/7
+        error_handling: true
+        ui_interaction: true
+      frontend_implemented:
+        - frontend/src/composables/useDownload.ts (downloadAssetsPack)
+        - frontend/src/components/preview/DownloadButtons.vue
+        - frontend/src/api/download.ts (getAssetsPackDownloadUrl)
+      backend_missing:
+        - backend/task-service/.../controller/DownloadController.java
+        - backend/task-service/.../service/AssetPackService.java
+        - backend/task-service/.../dto/AssetPackResponse.java
+      test_locations:
+        - frontend/src/composables/__tests__/useDownload.spec.ts
+        - frontend/src/components/preview/__tests__/DownloadButtons.spec.ts
+
+# Task Checkbox Verification
+task_checkbox_verification:
+  note: "Story tasks show backend tasks as unchecked, which is correct"
+  frontend_tasks: "Partially checked per Dev log"
+  backend_tasks: "All unchecked - NOT IMPLEMENTED"
+
+# Issues Summary
+issues_by_severity:
+  critical: 1
+  high: 0
+  medium: 0
+  low: 0
+
+issues:
+  - id: "5.2-CRIT-001"
+    severity: CRITICAL
+    finding: "Backend implementation missing - DownloadController, DownloadService, AssetPackService not created"
+    location: "backend/task-service/"
+    status: BLOCKING
+    impact: >
+      Frontend calls non-existent APIs. Features cannot function in production.
+      AC1 and AC2 main scenarios cannot be executed.
+    recommendation: "Implement backend endpoints before re-submitting for QA review"
+
+# Incremental Context (for Round 2+ optimization)
+incremental_context:
+  cached_risk_level: LOW
+  cached_review_mode: automated_plus_spot_check
+  cached_project_type: fullstack
+  failed_acs: [AC1, AC2]
+  frontend_complete: true
+  backend_complete: false
+  round2_focus:
+    - "Backend DownloadController implementation"
+    - "Backend AssetPackService implementation"
+    - "Backend unit tests"
+    - "Integration tests"
+
+# Quality Metrics
+quality_metrics:
+  implementation_gate_score: 50%
+  ac_coverage_rate: 50%
+  test_pass_rate: 100%
+  frontend_coverage: 100%
+  backend_coverage: 0%
+  overall_assessment: incomplete
+
+# Action Required
+action_required:
+  blocker: "Backend implementation"
+  owner: Dev
+  tasks:
+    - "Implement DownloadController.java with GET /tasks/{id}/output/download"
+    - "Implement DownloadService.java with OSS signed URL generation"
+    - "Implement FilenameUtils.java for filename sanitization"
+    - "Implement AssetPackService.java with ZIP creation"
+    - "Add backend unit tests"
+    - "Update story status to Review when complete"
