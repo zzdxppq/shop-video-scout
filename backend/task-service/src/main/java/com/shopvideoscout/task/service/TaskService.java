@@ -4,6 +4,8 @@ import com.shopvideoscout.common.exception.BusinessException;
 import com.shopvideoscout.common.result.ResultCode;
 import com.shopvideoscout.task.constant.TaskConstants;
 import com.shopvideoscout.task.dto.CreateTaskRequest;
+import com.shopvideoscout.task.dto.SubtitleSettingsRequest;
+import com.shopvideoscout.task.dto.SubtitleSettingsResponse;
 import com.shopvideoscout.task.dto.TaskResponse;
 import com.shopvideoscout.task.entity.Task;
 import com.shopvideoscout.task.mapper.TaskMapper;
@@ -107,5 +109,41 @@ public class TaskService {
             throw new BusinessException(ResultCode.FORBIDDEN, "无权访问此任务");
         }
         return TaskResponse.fromEntity(task);
+    }
+
+    /**
+     * Update subtitle settings for a task.
+     * Story 4.5: 字幕设置页面
+     *
+     * BR-1.2: 开关状态实时保存到任务配置中
+     * BR-2.3: 样式选择实时保存到 tasks.subtitle_style 字段
+     *
+     * @param taskId task ID
+     * @param userId user ID for ownership verification
+     * @param request subtitle settings to update
+     * @return updated subtitle settings
+     * @throws BusinessException if task not found or not owned by user
+     */
+    @Transactional
+    public SubtitleSettingsResponse updateSubtitleSettings(Long taskId, Long userId, SubtitleSettingsRequest request) {
+        log.debug("Updating subtitle settings for task: {}, user: {}", taskId, userId);
+
+        Task task = taskMapper.selectById(taskId);
+        if (task == null) {
+            throw new BusinessException(ResultCode.TASK_NOT_FOUND, "任务不存在");
+        }
+        if (!task.getUserId().equals(userId)) {
+            throw new BusinessException(ResultCode.FORBIDDEN, "无权访问此任务");
+        }
+
+        // Update subtitle settings
+        task.setSubtitleEnabled(request.getSubtitleEnabled());
+        task.setSubtitleStyle(request.getSubtitleStyle());
+
+        taskMapper.updateById(task);
+        log.info("Subtitle settings updated for task: {}, enabled={}, style={}",
+            taskId, request.getSubtitleEnabled(), request.getSubtitleStyle());
+
+        return SubtitleSettingsResponse.of(task.getSubtitleEnabled(), task.getSubtitleStyle());
     }
 }

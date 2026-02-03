@@ -2,6 +2,8 @@ package com.shopvideoscout.task.controller;
 
 import com.shopvideoscout.common.result.R;
 import com.shopvideoscout.task.dto.CreateTaskRequest;
+import com.shopvideoscout.task.dto.SubtitleSettingsRequest;
+import com.shopvideoscout.task.dto.SubtitleSettingsResponse;
 import com.shopvideoscout.task.dto.TaskResponse;
 import com.shopvideoscout.task.service.TaskService;
 import jakarta.validation.Valid;
@@ -73,6 +75,26 @@ public class TaskController {
             @RequestHeader("X-User-Id") Long userId) {
         log.debug("Get task {} request from user: {}", id, userId);
         TaskResponse response = taskService.getTaskForUser(id, userId);
+        return R.ok(response);
+    }
+
+    /**
+     * Update subtitle settings for a task.
+     * PUT /api/v1/tasks/{id}/subtitle-settings
+     * Story 4.5: 字幕设置页面
+     *
+     * @param id task ID
+     * @param request subtitle settings request
+     * @param userId injected from JWT via Gateway header
+     * @return updated subtitle settings
+     */
+    @PutMapping("/{id}/subtitle-settings")
+    public R<SubtitleSettingsResponse> updateSubtitleSettings(
+            @PathVariable Long id,
+            @Valid @RequestBody SubtitleSettingsRequest request,
+            @RequestHeader("X-User-Id") Long userId) {
+        log.debug("Update subtitle settings for task {} from user: {}", id, userId);
+        SubtitleSettingsResponse response = taskService.updateSubtitleSettings(id, userId, request);
         return R.ok(response);
     }
 }
