@@ -71,7 +71,12 @@ public enum ResultCode {
     // Video Composition Errors (1023-1025, Story 4.3)
     COMPOSITION_FAILED(1023, "视频合成失败"),
     VIDEO_CUTTING_FAILED(1024, "视频片段裁剪失败"),
-    OUTPUT_NOT_READY(1025, "视频输出尚未就绪");
+    OUTPUT_NOT_READY(1025, "视频输出尚未就绪"),
+
+    // Download/Export Errors (1026-1028, Story 5.2)
+    NO_ASSETS_TO_PACK(1026, "无推荐镜头可下载"),
+    ASSET_PACK_FAILED(1027, "素材包生成失败，请重试"),
+    OSS_ERROR(1028, "生成下载链接失败");
 
     private final int code;
     private final String message;
