@@ -22,6 +22,7 @@
         <module>common-core</module>
         <module>common-security</module>
         <module>common-mybatis</module>
+        <module>common-doubao</module>
         <module>gateway-service</module>
         <module>user-service</module>
         <module>task-service</module>
@@ -87,6 +88,11 @@
             <dependency>
                 <groupId>com.shopvideoscout</groupId>
                 <artifactId>common-mybatis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.shopvideoscout</groupId>
+                <artifactId>common-doubao</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

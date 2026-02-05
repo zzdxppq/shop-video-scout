@@ -67,6 +67,22 @@ management:
     health:
       show-details: always
 
+# Doubao (Volcengine) API Configuration (Story 5.3)
+doubao:
+  api-key: ${DOUBAO_API_KEY:}
+  endpoint: ${DOUBAO_ENDPOINT:https://ark.cn-beijing.volces.com/api/v3/chat/completions}
+  model: ${DOUBAO_MODEL:doubao-pro-32k}
+  timeout-seconds: 30
+  default-temperature: 0.7
+
+# Feign Client Configuration
+spring.cloud.openfeign:
+  client:
+    config:
+      default:
+        connect-timeout: 5000
+        read-timeout: 10000
+
 # Logging
 logging:
   level:

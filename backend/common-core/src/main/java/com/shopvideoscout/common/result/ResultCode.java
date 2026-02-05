@@ -76,7 +76,11 @@ public enum ResultCode {
     // Download/Export Errors (1026-1028, Story 5.2)
     NO_ASSETS_TO_PACK(1026, "无推荐镜头可下载"),
     ASSET_PACK_FAILED(1027, "素材包生成失败，请重试"),
-    OSS_ERROR(1028, "生成下载链接失败");
+    OSS_ERROR(1028, "生成下载链接失败"),
+
+    // Publish Assist Errors (1030-1031, Story 5.3)
+    SCRIPT_CONTENT_MISSING(1030, "脚本内容缺失"),
+    PUBLISH_ASSIST_LIMIT_EXCEEDED(1031, "已达到重新生成次数上限（3次）");
 
     private final int code;
     private final String message;
