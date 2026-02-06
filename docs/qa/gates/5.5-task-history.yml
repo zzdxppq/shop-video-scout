@@ -1,0 +1,197 @@
+# QA Gate File
+# Story 5.5: 历史任务管理
+# Generated: 2026-02-06
+
+story_id: "5.5"
+story_title: "历史任务管理"
+review_date: "2026-02-06"
+reviewer: "JW (QA Agent)"
+
+# Gate Result
+gate_result: PASS
+next_status: Done
+reasoning: >
+  Round 1 QA Review PASS. All 2 ACs fully implemented with 11 business rules covered.
+  AC1 (历史任务列表): 6/6 BRs - pagination (10/page), status icons, shop type tags,
+  relative time, thumbnail display, empty state.
+  AC2 (删除任务): 5/5 BRs - hard delete, async OSS cleanup (5 paths), CASCADE,
+  ownership validation, in-progress status block.
+  Frontend tests: 652/653 passed (99.8%). 1 failure from Story 5.4 (unrelated).
+  Story 5.5 specific tests: 52/52 passed (100%).
+
+# Review Configuration
+review_round: 1
+review_mode: automated
+risk_level: LOW
+
+# Test Results
+test_results:
+  frontend_tests:
+    executed: true
+    verification_method: direct_execution
+    evidence_source: "npm run test -- --run"
+    total: 653
+    passed: 652
+    failed: 1
+    pass_rate: 99.8%
+    typescript_check: PASS
+    story_specific_tests: 52
+    story_specific_pass_rate: 100%
+
+  story_test_breakdown:
+    - file: TaskHistoryCard.test.ts
+      tests: 15
+      passed: 15
+    - file: DeleteConfirmModal.test.ts
+      tests: 11
+      passed: 11
+    - file: EmptyState.test.ts
+      tests: 9
+      passed: 9
+    - file: useInfiniteScroll.spec.ts
+      tests: 7
+      passed: 7
+    - file: useTaskHistory.spec.ts
+      tests: 10
+      passed: 10
+
+  failed_test_analysis:
+    file: "src/composables/__tests__/usePublishAssist.spec.ts"
+    test_name: "should return false when regenerateRemaining is 0"
+    related_story: "5.4"
+    blocking: false
+
+  project_type:
+    type: fullstack
+    frontend: vue3_ts
+    backend: spring_boot
+
+# AC Coverage Verification
+ac_coverage:
+  verification_method: traceability_verification
+  coverage_rate: 100%
+  passed: true
+  total_acs: 2
+  fully_verified: 2
+  partially_verified: 0
+  not_verified: 0
+
+  details:
+    - ac_id: AC1
+      title: 历史任务列表
+      status: IMPLEMENTED
+      business_rules_covered: 6/6
+      aspects_verified:
+        main_scenario: true
+        business_rules: true
+        error_handling: true
+        ui_interaction: true
+      code_locations:
+        - frontend/src/views/TaskHistoryView.vue
+        - frontend/src/components/task/TaskHistoryCard.vue
+        - frontend/src/composables/useTaskHistory.ts
+        - frontend/src/composables/useInfiniteScroll.ts
+        - frontend/src/components/common/EmptyState.vue
+      test_locations:
+        - frontend/src/components/task/__tests__/TaskHistoryCard.test.ts
+        - frontend/src/composables/__tests__/useTaskHistory.spec.ts
+        - frontend/src/composables/__tests__/useInfiniteScroll.spec.ts
+        - frontend/src/components/common/__tests__/EmptyState.test.ts
+      key_implementations:
+        - "PAGE_SIZE = 10 per page"
+        - "Status icons: completed=✓, composing/analyzing=spinner, failed=✕"
+        - "Shop type labels: 餐饮美食, 美容美发, 休闲娱乐, 其他"
+        - "Relative time: 刚刚, X分钟前, X小时前, X天前, date"
+        - "IntersectionObserver for infinite scroll"
+        - "EmptyState with 暂无任务记录"
+
+    - ac_id: AC2
+      title: 删除任务
+      status: IMPLEMENTED
+      business_rules_covered: 5/5
+      aspects_verified:
+        main_scenario: true
+        business_rules: true
+        error_handling: true
+        ui_interaction: true
+      code_locations:
+        - frontend/src/components/common/DeleteConfirmModal.vue
+        - backend/task-service/.../controller/TaskController.java
+        - backend/task-service/.../service/TaskService.java
+        - backend/task-service/.../service/OssCleanupService.java
+      test_locations:
+        - frontend/src/components/common/__tests__/DeleteConfirmModal.test.ts
+        - frontend/src/composables/__tests__/useTaskHistory.spec.ts
+      key_implementations:
+        - "Hard delete with taskMapper.deleteById()"
+        - "@Async OSS cleanup: videos/, frames/, audio/, output/, assets/"
+        - "Ownership validation: task.getUserId().equals(userId)"
+        - "Status validation: IN_PROGRESS_STATUSES block"
+        - "Optimistic UI removal with rollback on error"
+        - "DeleteConfirmModal with loading state"
+
+# Deliverables Verification
+deliverables:
+  frontend_views:
+    - TaskHistoryView.vue
+
+  frontend_components:
+    - TaskHistoryCard.vue
+    - DeleteConfirmModal.vue
+    - EmptyState.vue
+
+  frontend_composables:
+    - useTaskHistory.ts
+    - useInfiniteScroll.ts
+
+  frontend_api:
+    - task.ts (getTaskHistory, deleteTask)
+
+  frontend_types:
+    - task.ts (TaskSummary, PagedResponse, TaskListParams)
+
+  frontend_router:
+    - "/history route added"
+
+  backend_controller:
+    - TaskController.java (getTaskHistory, deleteTask)
+
+  backend_service:
+    - TaskService.java (getTaskHistory, deleteTask)
+    - OssCleanupService.java
+
+  tests:
+    - TaskHistoryCard.test.ts (15 tests)
+    - DeleteConfirmModal.test.ts (11 tests)
+    - EmptyState.test.ts (9 tests)
+    - useInfiniteScroll.spec.ts (7 tests)
+    - useTaskHistory.spec.ts (10 tests)
+
+# Task Checkbox Verification
+task_checkbox_verification:
+  T0_infrastructure: complete
+  T1_task_list_page: complete
+  T2_delete_modal: complete
+  T3_backend_delete_api: complete
+  T4_navigation_integration: complete
+  T5_final_verification: complete
+
+# Issues Summary
+issues_by_severity:
+  critical: 0
+  high: 0
+  medium: 0
+  low: 0
+
+# Quality Metrics
+quality_metrics:
+  implementation_gate_score: 100%
+  ac_coverage_rate: 100%
+  business_rules_coverage: 11/11
+  test_pass_rate: 100% (story-specific)
+  overall_assessment: pass
+
+# Recommendations
+recommendations:
+  - "Consider adding E2E tests for full delete flow with OSS cleanup"
+  - "Consider adding pull-to-refresh gesture for mobile UX"
