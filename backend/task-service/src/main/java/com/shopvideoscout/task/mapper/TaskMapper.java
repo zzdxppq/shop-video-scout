@@ -50,4 +50,26 @@ public interface TaskMapper extends BaseMapper<Task> {
         "</script>"
     })
     List<Task> findInProgressTasks(@Param("userId") Long userId, @Param("statuses") String[] statuses);
+
+    /**
+     * Find all tasks for a user with pagination.
+     * Story 5.5: 历史任务管理
+     *
+     * @param userId user ID
+     * @param offset offset for pagination
+     * @param limit max results
+     * @return list of tasks
+     */
+    @Select("SELECT * FROM tasks WHERE user_id = #{userId} ORDER BY created_at DESC LIMIT #{limit} OFFSET #{offset}")
+    List<Task> findTasksByUserWithPagination(@Param("userId") Long userId, @Param("offset") int offset, @Param("limit") int limit);
+
+    /**
+     * Count all tasks for a user.
+     * Story 5.5: 历史任务管理
+     *
+     * @param userId user ID
+     * @return total count
+     */
+    @Select("SELECT COUNT(*) FROM tasks WHERE user_id = #{userId}")
+    long countTasksByUser(@Param("userId") Long userId);
 }

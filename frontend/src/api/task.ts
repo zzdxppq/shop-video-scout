@@ -9,7 +9,10 @@ import type {
   GetUploadUrlRequest,
   GetUploadUrlResponse,
   ConfirmUploadRequest,
-  TaskVideo
+  TaskVideo,
+  TaskSummary,
+  PagedResponse,
+  TaskListParams
 } from '../types/task';
 
 /**
@@ -24,13 +27,40 @@ export function createTask(data: CreateTaskRequest): Promise<ApiResponse<TaskRes
 }
 
 /**
- * Get task list for current user.
+ * Get task list for current user (legacy - returns in-progress tasks only).
  * GET /api/v1/tasks
  *
  * @returns list of tasks
  */
 export function getTasks(): Promise<ApiResponse<TaskResponse[]>> {
   return request.get('/tasks');
+}
+
+/**
+ * Get paginated task history for current user.
+ * GET /api/v1/tasks/history
+ * Story 5.5: 历史任务管理
+ *
+ * @param params pagination params (page, size)
+ * @returns paginated task summary list
+ */
+export function getTaskHistory(params: TaskListParams = {}): Promise<ApiResponse<PagedResponse<TaskSummary>>> {
+  const queryParams = new URLSearchParams();
+  if (params.page) queryParams.set('page', String(params.page));
+  if (params.size) queryParams.set('size', String(params.size));
+  const queryString = queryParams.toString();
+  return request.get(`/tasks/history${queryString ? `?${queryString}` : ''}`);
+}
+
+/**
+ * Delete a task.
+ * DELETE /api/v1/tasks/{id}
+ * Story 5.5: 历史任务管理
+ *
+ * @param taskId task ID
+ */
+export function deleteTask(taskId: number): Promise<ApiResponse<void>> {
+  return request.delete(`/tasks/${taskId}`);
 }
 
 /**

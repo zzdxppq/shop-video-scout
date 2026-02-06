@@ -2,9 +2,11 @@ package com.shopvideoscout.task.controller;
 
 import com.shopvideoscout.common.result.R;
 import com.shopvideoscout.task.dto.CreateTaskRequest;
+import com.shopvideoscout.task.dto.PagedResponse;
 import com.shopvideoscout.task.dto.SubtitleSettingsRequest;
 import com.shopvideoscout.task.dto.SubtitleSettingsResponse;
 import com.shopvideoscout.task.dto.TaskResponse;
+import com.shopvideoscout.task.dto.TaskSummaryResponse;
 import com.shopvideoscout.task.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,17 +50,37 @@ public class TaskController {
     }
 
     /**
-     * Get task list for current user.
+     * Get task list for current user (in-progress tasks only).
      * GET /api/v1/tasks
      *
      * @param userId injected from JWT via Gateway header
-     * @return list of user's tasks
+     * @return list of user's in-progress tasks
      */
     @GetMapping
     public R<List<TaskResponse>> getTasks(@RequestHeader("X-User-Id") Long userId) {
         log.debug("Get tasks request from user: {}", userId);
         List<TaskResponse> tasks = taskService.getInProgressTasks(userId);
         return R.ok(tasks);
+    }
+
+    /**
+     * Get paginated task history for current user.
+     * GET /api/v1/tasks/history
+     * Story 5.5: 历史任务管理
+     *
+     * @param page page number (1-indexed, default 1)
+     * @param size page size (default 10, max 50)
+     * @param userId injected from JWT via Gateway header
+     * @return paginated task summary list
+     */
+    @GetMapping("/history")
+    public R<PagedResponse<TaskSummaryResponse>> getTaskHistory(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestHeader("X-User-Id") Long userId) {
+        log.debug("Get task history request from user: {}, page: {}, size: {}", userId, page, size);
+        PagedResponse<TaskSummaryResponse> response = taskService.getTaskHistory(userId, page, size);
+        return R.ok(response);
     }
 
     /**
@@ -96,5 +118,27 @@ public class TaskController {
         log.debug("Update subtitle settings for task {} from user: {}", id, userId);
         SubtitleSettingsResponse response = taskService.updateSubtitleSettings(id, userId, request);
         return R.ok(response);
+    }
+
+    /**
+     * Delete a task.
+     * DELETE /api/v1/tasks/{id}
+     * Story 5.5: 历史任务管理
+     *
+     * Deletes the task and associated OSS files.
+     * Only the task owner can delete.
+     * Cannot delete tasks that are currently processing (analyzing/composing).
+     *
+     * @param id task ID
+     * @param userId injected from JWT via Gateway header
+     * @return 200 OK on success
+     */
+    @DeleteMapping("/{id}")
+    public R<Void> deleteTask(
+            @PathVariable Long id,
+            @RequestHeader("X-User-Id") Long userId) {
+        log.debug("Delete task {} request from user: {}", id, userId);
+        taskService.deleteTask(id, userId);
+        return R.ok();
     }
 }

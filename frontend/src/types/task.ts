@@ -118,3 +118,34 @@ export const VIDEO_UPLOAD_CONSTRAINTS = {
   ACCEPTED_TYPES: ['video/mp4', 'video/quicktime', 'video/x-m4v'],
   ACCEPTED_EXTENSIONS: ['.mp4', '.mov', '.m4v']
 } as const;
+
+/**
+ * Task summary for history list (Story 5.5).
+ */
+export interface TaskSummary {
+  id: number;
+  shop_name: string;
+  shop_type: ShopType;
+  status: TaskStatus;
+  thumbnail_url?: string;
+  created_at: string;
+}
+
+/**
+ * Paginated response wrapper (Story 5.5).
+ */
+export interface PagedResponse<T> {
+  items: T[];
+  total: number;
+  page: number;
+  size: number;
+  has_more: boolean;
+}
+
+/**
+ * Task list query params (Story 5.5).
+ */
+export interface TaskListParams {
+  page?: number;
+  size?: number;
+}

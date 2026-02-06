@@ -80,7 +80,12 @@ public enum ResultCode {
 
     // Publish Assist Errors (1030-1031, Story 5.3)
     SCRIPT_CONTENT_MISSING(1030, "脚本内容缺失"),
-    PUBLISH_ASSIST_LIMIT_EXCEEDED(1031, "已达到重新生成次数上限（3次）");
+    PUBLISH_ASSIST_LIMIT_EXCEEDED(1031, "已达到重新生成次数上限（3次）"),
+
+    // Task Delete Errors (1032-1034, Story 5.5)
+    TASK_IN_PROGRESS(1032, "任务正在处理中，无法删除"),
+    TASK_DELETE_FORBIDDEN(1033, "无权限删除此任务"),
+    TASK_DELETE_FAILED(1034, "删除任务失败");
 
     private final int code;
     private final String message;

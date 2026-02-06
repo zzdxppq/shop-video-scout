@@ -45,6 +45,30 @@ const router = createRouter({
       name: 'task-script',
       component: () => import('../views/ScriptEditorView.vue'),
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/task/:id/voice',
+      name: 'task-voice',
+      component: () => import('../views/VoiceSettingsView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/task/:id/progress',
+      name: 'task-progress',
+      component: () => import('../views/ComposeProgressView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/task/:id/preview',
+      name: 'task-preview',
+      component: () => import('../views/VideoPreviewView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/history',
+      name: 'task-history',
+      component: () => import('../views/TaskHistoryView.vue'),
+      meta: { requiresAuth: true }
     }
   ]
 });
