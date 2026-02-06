@@ -1,0 +1,35 @@
+# ============================================================================
+# Publish Service - Production Configuration
+# ============================================================================
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER_ADDR:10.100.6.14:8848}
+        namespace: prod
+        group: SHOP_VIDEO_SCOUT
+
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:10.100.4.10}:${MYSQL_PORT:3306}/shop_video_scout?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+
+  data:
+    redis:
+      host: ${REDIS_HOST:10.100.2.17}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD}
+      database: ${REDIS_DATABASE:21}
+
+# Doubao (火山引擎豆包) API Configuration
+doubao:
+  api-key: ${DOUBAO_API_KEY}
+  endpoint: https://ark.cn-beijing.volces.com/api/v3/chat/completions
+  model: doubao-pro-32k
+  timeout-seconds: 30
+
+logging:
+  level:
+    com.shopvideoscout: INFO
+    com.baomidou.mybatisplus: WARN

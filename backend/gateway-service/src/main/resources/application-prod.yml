@@ -1,0 +1,34 @@
+# ============================================================================
+# Gateway Service - Production Configuration
+# ============================================================================
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER_ADDR:10.100.6.14:8848}
+        namespace: prod
+        group: SHOP_VIDEO_SCOUT
+
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins:
+              - "https://file.jingshidata.com"
+              - "https://video.jingshidata.com"
+
+  data:
+    redis:
+      host: ${REDIS_HOST:10.100.2.17}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD}
+      database: ${REDIS_DATABASE:21}
+
+jwt:
+  secret: ${JWT_SECRET}
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
+    com.shopvideoscout: INFO
